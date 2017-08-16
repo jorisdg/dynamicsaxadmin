@@ -47,7 +47,7 @@ namespace CodeCrib.AX.Client
 
         protected XmlDocument ExtractXML(string filename)
         {
-            string xml = "";
+            string xml = string.Empty;
 
             bool xmlBlock = false;
             using (StreamReader streamReader = new StreamReader(File.OpenRead(filename)))

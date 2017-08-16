@@ -22,9 +22,9 @@ namespace CodeCrib.AX.Client
 
                 while ((currentLine = reader.ReadLine()) != null)
                 {
-                    originId = "";
+                    originId = String.Empty;
                     this.processXpoLine(currentLine);
-                    if (!originId.Equals(""))
+                    if (!String.IsNullOrEmpty(originId))
                     {
                         if (originDictionary.ContainsKey(originId))
                         {
@@ -47,32 +47,32 @@ namespace CodeCrib.AX.Client
         protected string createObjectNameWithPath()
         {
             string path = xpoParser.objectCodeToAotPath(objectTypeCode);
-            string name = "";
-            if (!path.Equals(""))
-                name = String.Format(@"{0}\{1}", path, objectName);
+            string name = string.Empty;
+            if (!String.IsNullOrEmpty(path))
+                name = String.Format("{0}\\{1}", path, objectName);
             else
                 name = objectName;
-            if (!subObjectName.Equals(""))
+            if (!String.IsNullOrEmpty(subObjectName))
             {
                 name = String.Format("{0}\\{1}", name, subObjectName);
             }
 
             return name;
         }
-        protected string objectName = "";
+        protected string objectName = String.Empty;
         protected bool withinProperties = false;
-        protected string objectTypeCode = "";
-        protected string originId = "";
+        protected string objectTypeCode = String.Empty;
+        protected string originId = String.Empty;
         protected XpoParser xpoParser = new XpoParser();
-        protected string subObjectName = "";
+        protected string subObjectName = String.Empty;
 
         public void processXpoLine(string line)
         {
             if (xpoParser.isElementTypeLine(line))
             {
                 objectTypeCode = xpoParser.getElementType(line);
-                objectName = "";
-                subObjectName = "";
+                objectName = String.Empty;
+                subObjectName = String.Empty;
             }
 
             if (xpoParser.isPropertiesStartLine(line))
@@ -80,7 +80,7 @@ namespace CodeCrib.AX.Client
             else if (xpoParser.isPropertiesEndLine(line))
                 withinProperties = false;
 
-            if (objectName.Equals("") && objectTypeCode.Equals(XpoParser.ObjectType_Table) && xpoParser.isTableDefinitionLine(line))
+            if (String.IsNullOrEmpty(objectName) && objectTypeCode.Equals(XpoParser.ObjectType_Table) && xpoParser.isTableDefinitionLine(line))
             {
                 objectName = xpoParser.getTableDefinitionName(line);
             }
@@ -92,7 +92,7 @@ namespace CodeCrib.AX.Client
             {
                 subObjectName = String.Format("Methods\\{0}", xpoParser.getMethodDefinitionName(line));
             }
-            if (objectName.Equals(""))
+            if (String.IsNullOrEmpty(objectName))
             {                
                 if (withinProperties && xpoParser.getPropertyLineName(line).ToLower().Equals("name"))
                 {

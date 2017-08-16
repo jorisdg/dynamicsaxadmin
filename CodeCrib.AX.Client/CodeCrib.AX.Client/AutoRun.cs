@@ -112,7 +112,7 @@ namespace CodeCrib.AX.Client
                 XmlSerializer serializer = new XmlSerializer(typeof(AxaptaAutoRun));
                 XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
                 // Set to blank so no namespace is used in output XML
-                ns.Add("", "");
+                ns.Add(String.Empty, String.Empty);
                 TextWriter writer = new StreamWriter(filename);
                 serializer.Serialize(writer, autoRun, ns);
                 writer.Close();

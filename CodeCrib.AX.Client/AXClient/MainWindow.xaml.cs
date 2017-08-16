@@ -24,11 +24,11 @@ namespace AXClient
         {
             InitializeComponent();
 
-            CodeCrib.AX.Client.AutoRun.AxaptaAutoRun autoRun = new CodeCrib.AX.Client.AutoRun.AxaptaAutoRun() { ExitWhenDone = true, LogFile = string.Format(@"{0}\ImportLog-{1}.xml", Environment.ExpandEnvironmentVariables(clientConfig.LogDirectory), Guid.NewGuid()) };
-            autoRun.Steps.Add(new CodeCrib.AX.Client.AutoRun.XpoImport() { File = xpoFile });
+            //CodeCrib.AX.Client.AutoRun.AxaptaAutoRun autoRun = new CodeCrib.AX.Client.AutoRun.AxaptaAutoRun() { ExitWhenDone = true, LogFile = string.Format(@"{0}\ImportLog-{1}.xml", Environment.ExpandEnvironmentVariables(clientConfig.LogDirectory), Guid.NewGuid()) };
+            //autoRun.Steps.Add(new CodeCrib.AX.Client.AutoRun.XpoImport() { File = xpoFile });
 
-            string autoRunFile = string.Format(@"{0}\AutoRun-ImportXPO-{1}.xml", Environment.GetEnvironmentVariable("temp"), Guid.NewGuid());
-            CodeCrib.AX.Client.AutoRun.AxaptaAutoRun.SerializeAutoRun(autoRun, autoRunFile);
+            //string autoRunFile = string.Format(@"{0}\AutoRun-ImportXPO-{1}.xml", Environment.GetEnvironmentVariable("temp"), Guid.NewGuid());
+            //CodeCrib.AX.Client.AutoRun.AxaptaAutoRun.SerializeAutoRun(autoRun, autoRunFile);
         }
     }
 }

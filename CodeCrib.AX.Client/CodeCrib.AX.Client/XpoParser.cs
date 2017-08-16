@@ -71,7 +71,7 @@ namespace CodeCrib.AX.Client
         public string getOriginIdValue(string line)
         {
             if (!isOriginIdLine(line))
-                return "";
+                return String.Empty;
 
             string searchText = line.ToLower().TrimStart().TrimEnd();
             Match match = OriginIdRegex.Match(searchText);
@@ -79,7 +79,7 @@ namespace CodeCrib.AX.Client
             {
                 return match.Groups[1].Value;
             }
-            return "";
+            return String.Empty;
         }
 
         public string getElementType(string line)
@@ -90,7 +90,7 @@ namespace CodeCrib.AX.Client
             if (elementTypeMatch.Success)
                 return elementTypeMatch.Groups[1].Value.ToUpper();
 
-            return "";
+            return String.Empty;
         }
         public string getPropertyLineName(string line)
         {
@@ -98,7 +98,7 @@ namespace CodeCrib.AX.Client
             {
                 return line.Split('#')[0].Trim();
             }
-            return "";
+            return String.Empty;
         }
 
         internal bool isTableDefinitionLine(string line)
@@ -119,7 +119,7 @@ namespace CodeCrib.AX.Client
             {
                 return line.Split('#')[1].Trim();
             }
-            return "";
+            return String.Empty;
         }
 
         internal object getMethodDefinitionName(string line)
@@ -128,7 +128,7 @@ namespace CodeCrib.AX.Client
             {
                 return line.Split('#')[1].Trim();
             }
-            return "";
+            return String.Empty;
         }
 
         internal bool isMethodDefinitionLine(string line)
@@ -143,7 +143,7 @@ namespace CodeCrib.AX.Client
             {
                 return line.Split('#')[1].Trim();
             }
-            return "";
+            return String.Empty;
         }
 
         public string getPropertyLineValue(string line)
@@ -152,7 +152,7 @@ namespace CodeCrib.AX.Client
             {
                 return line.Split('#')[1];
             }
-            return "";
+            return String.Empty;
         }
         public Boolean isElementTypeLine(string line)
         {
@@ -203,7 +203,7 @@ namespace CodeCrib.AX.Client
                 case "SRP": return "SSRS Reports";
                     // END: End(of file)                
             }
-            return "";
+            return String.Empty;
         }
     }
 }

@@ -26,7 +26,7 @@ namespace CodeCrib.AX.TFS
             string configurationFile = ConfigurationFile.Get(context);
             string database = Database.Get(context);
 
-            var serverConfig = Helper.GetServerConfig(configurationFile);
+            var serverConfig = CodeCrib.AX.Deploy.Configs.GetServerConfig(configurationFile);
 
             serverConfig.Database = database;
 

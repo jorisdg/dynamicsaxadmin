@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9F793FC4-3616-44FA-8CED-6475C840BE00}</ProjectGuid>
+    <ProjectGuid>{89B9B3F7-3A8A-44E7-A68C-AEC566185788}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CodeCrib.AX.Client</RootNamespace>
-    <AssemblyName>CodeCrib.AX.Client</AssemblyName>
+    <RootNamespace>CodeCrib.AX.Deploy.PowerShell</RootNamespace>
+    <AssemblyName>CodeCrib.AX.Deploy.PowerShell</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -33,22 +33,35 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Management.Automation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\WindowsPowerShell\v1.0\System.Management.Automation.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AutoRun.cs" />
-    <Compile Include="CILGenerationOutput.cs" />
+    <Compile Include="Clean.cs" />
     <Compile Include="Client.cs" />
-    <Compile Include="CombineXPOs.cs" />
-    <Compile Include="Command.cs" />
-    <Compile Include="CompileOutput.cs" />
+    <Compile Include="Config.cs" />
+    <Compile Include="ManagementUtilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="XPOLabelCheck.cs" />
-    <Compile Include="XpoParser.cs" />
-    <Compile Include="XPOStaticAnalysis.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\CodeCrib.AX.Client\CodeCrib.AX.Client\CodeCrib.AX.Client.csproj">
+      <Project>{9f793fc4-3616-44fa-8ced-6475c840be00}</Project>
+      <Name>CodeCrib.AX.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\CodeCrib.AX.Config\CodeCrib.AX.Config\CodeCrib.AX.Config.csproj">
+      <Project>{e84f034b-0fea-49a6-8cba-b801cb494533}</Project>
+      <Name>CodeCrib.AX.Config</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CodeCrib.AX.Deploy\CodeCrib.AX.Deploy.csproj">
+      <Project>{287a3580-2245-41e6-b5b3-986e1f8c1f22}</Project>
+      <Name>CodeCrib.AX.Deploy</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

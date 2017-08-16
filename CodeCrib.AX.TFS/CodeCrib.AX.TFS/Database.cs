@@ -35,7 +35,7 @@ namespace CodeCrib.AX.TFS
 
             if (string.IsNullOrEmpty(serverName))
             {
-                var serverConfig = Helper.GetServerConfig(configurationFile);
+                var serverConfig = CodeCrib.AX.Deploy.Configs.GetServerConfig(configurationFile);
                 serverName = serverConfig.DatabaseServer;
             }
 
@@ -70,7 +70,7 @@ namespace CodeCrib.AX.TFS
 
             if (string.IsNullOrEmpty(serverName))
             {
-                var serverConfig = Helper.GetServerConfig(configurationFile);
+                var serverConfig = CodeCrib.AX.Deploy.Configs.GetServerConfig(configurationFile);
                 serverName = serverConfig.DatabaseServer;
             }
 

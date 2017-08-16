@@ -36,7 +36,7 @@ namespace CodeCrib.AX.TFS
             string manifestFile = ModelManifestFile.Get(context);
             string version = VersionOverride.Get(context);
             string description = DescriptionOverride.Get(context);
-            var serverConfig = Helper.GetServerConfig(configurationFile);
+            var serverConfig = CodeCrib.AX.Deploy.Configs.GetServerConfig(configurationFile);
 
             CodeCrib.AX.Manage.ModelStore store = null;
             if (serverConfig.AOSVersionOrigin.Substring(0, 3) == "6.0")
@@ -80,7 +80,7 @@ namespace CodeCrib.AX.TFS
             string modelName, publisher, layer;
             CodeCrib.AX.Manage.ModelStore.ExtractModelInfo(ModelManifestFile.Get(context), out publisher, out modelName, out layer);
             string keyFile = StrongNameKeyFile.Get(context);
-            var serverConfig = Helper.GetServerConfig(configurationFile);
+            var serverConfig = CodeCrib.AX.Deploy.Configs.GetServerConfig(configurationFile);
 
             CodeCrib.AX.Manage.ModelStore store = null;
             if (serverConfig.AOSVersionOrigin.Substring(0, 3) == "6.0")
@@ -113,8 +113,8 @@ namespace CodeCrib.AX.TFS
         {
             string configurationFile = ConfigurationFile.Get(context);
             string modelFile = ModelFile.Get(context);
-            var serverConfig = Helper.GetServerConfig(configurationFile);
             bool overwrite = OverwriteExisting.Get(context);
+            var serverConfig = CodeCrib.AX.Deploy.Configs.GetServerConfig(configurationFile);
 
             CodeCrib.AX.Manage.ModelStore store = null;
             if (serverConfig.AOSVersionOrigin.Substring(0, 3) == "6.0")
@@ -132,7 +132,7 @@ namespace CodeCrib.AX.TFS
             }
             else
             {
-            store.InstallModel(modelFile);
+                store.InstallModel(modelFile);
             }
             if (SetNoInstallMode.Get(context))
                 store.SetNoInstallMode();
@@ -156,7 +156,7 @@ namespace CodeCrib.AX.TFS
             string configurationFile = ConfigurationFile.Get(context);
             string modelStoreFile = ModelStoreFile.Get(context);
             string axutilFolder = AxUtilBinaryFolder.Get(context);
-            var serverConfig = Helper.GetServerConfig(configurationFile);
+            var serverConfig = CodeCrib.AX.Deploy.Configs.GetServerConfig(configurationFile);
             bool compressModelStore = CompressModelStore.Get(context);
 
             CodeCrib.AX.Manage.ModelStore store = null;
@@ -173,7 +173,7 @@ namespace CodeCrib.AX.TFS
 
             if (compressModelStore)
             {
-                Helper.CompressFile(new FileInfo(modelStoreFile));
+                CodeCrib.AX.Deploy.Configs.CompressFile(new FileInfo(modelStoreFile));
             }
         }
     }
@@ -193,7 +193,7 @@ namespace CodeCrib.AX.TFS
             string configurationFile = ConfigurationFile.Get(context);
             string modelName, publisher, layer;
             CodeCrib.AX.Manage.ModelStore.ExtractModelInfo(ModelManifestFile.Get(context), out publisher, out modelName, out layer);
-            var serverConfig = Helper.GetServerConfig(configurationFile);
+            var serverConfig = CodeCrib.AX.Deploy.Configs.GetServerConfig(configurationFile);
 
             CodeCrib.AX.Manage.ModelStore store = null;
             if (serverConfig.AOSVersionOrigin.Substring(0, 3) == "6.0")
@@ -226,7 +226,7 @@ namespace CodeCrib.AX.TFS
         {
             string configurationFile = ConfigurationFile.Get(context);
             string layer = Layer.Get(context);
-            var serverConfig = Helper.GetServerConfig(configurationFile);
+            var serverConfig = CodeCrib.AX.Deploy.Configs.GetServerConfig(configurationFile);
 
             CodeCrib.AX.Manage.ModelStore store = null;
             if (serverConfig.AOSVersionOrigin.Substring(0, 3) == "6.0")
@@ -260,7 +260,7 @@ namespace CodeCrib.AX.TFS
             string configurationFile = ConfigurationFile.Get(context);
             string modelName, publisher, layer;
             CodeCrib.AX.Manage.ModelStore.ExtractModelInfo(ModelManifestFile.Get(context), out publisher, out modelName, out layer);
-            var serverConfig = Helper.GetServerConfig(configurationFile);
+            var serverConfig = CodeCrib.AX.Deploy.Configs.GetServerConfig(configurationFile);
 
             CodeCrib.AX.Manage.ModelStore store = null;
             if (serverConfig.AOSVersionOrigin.Substring(0, 3) == "6.0")

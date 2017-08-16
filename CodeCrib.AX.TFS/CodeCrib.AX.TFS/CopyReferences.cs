@@ -27,7 +27,7 @@ namespace CodeCrib.AX.TFS
         protected override void Execute(CodeActivityContext context)
         {
             string configurationFile = ConfigurationFile.Get(context);
-            var serverConfig = Helper.GetServerConfig(configurationFile);
+            var serverConfig = CodeCrib.AX.Deploy.Configs.GetServerConfig(configurationFile);
             string sourcePath = ReferencesFolder.Get(context);
 
             context.TrackBuildMessage("Deploying references to client and server");

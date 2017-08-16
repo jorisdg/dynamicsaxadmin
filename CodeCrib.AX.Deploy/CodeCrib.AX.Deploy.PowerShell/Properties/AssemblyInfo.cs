@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("CodeCrib.AX.Compile")]
+[assembly: AssemblyTitle("CodeCrib.AX.Deploy.PowerShell")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("CodeCrib.AX.Compile")]
-[assembly: AssemblyCopyright("Copyright ©  2013")]
+[assembly: AssemblyProduct("CodeCrib.AX.Deploy.PowerShell")]
+[assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("fd00fda5-3419-44c3-af2c-047c205d3c6e")]
+[assembly: Guid("485a67d2-f929-49ea-af68-002e8f3a5da1")]
 
 // Version information for an assembly consists of the following four values:
 //

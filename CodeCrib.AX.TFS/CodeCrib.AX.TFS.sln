@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeCrib.AX.TFS", "CodeCrib.AX.TFS\CodeCrib.AX.TFS.csproj", "{F622C66F-77C0-4965-B9CD-3871BC9EB71B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeCrib.AX.Client", "..\CodeCrib.AX.Client\CodeCrib.AX.Client\CodeCrib.AX.Client.csproj", "{9F793FC4-3616-44FA-8CED-6475C840BE00}"
@@ -12,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeCrib.AX.Sql", "..\CodeCrib.AX.Sql\CodeCrib.AX.Sql\CodeCrib.AX.Sql.csproj", "{5D785EF3-ABF3-4038-8711-DE346D55C5D3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeCrib.AX.AXBuild", "..\CodeCrib.AX.AXBuild\CodeCrib.AX.AXBuild\CodeCrib.AX.AXBuild.csproj", "{C1E5B831-90A6-4AB5-80DD-7918F817AFE7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeCrib.AX.Deploy", "..\CodeCrib.AX.Deploy\CodeCrib.AX.Deploy\CodeCrib.AX.Deploy.csproj", "{287A3580-2245-41E6-B5B3-986E1F8C1F22}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +47,10 @@ Global
 		{C1E5B831-90A6-4AB5-80DD-7918F817AFE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1E5B831-90A6-4AB5-80DD-7918F817AFE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1E5B831-90A6-4AB5-80DD-7918F817AFE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{287A3580-2245-41E6-B5B3-986E1F8C1F22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{287A3580-2245-41E6-B5B3-986E1F8C1F22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{287A3580-2245-41E6-B5B3-986E1F8C1F22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{287A3580-2245-41E6-B5B3-986E1F8C1F22}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

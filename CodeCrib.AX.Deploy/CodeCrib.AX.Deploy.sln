@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeCrib.AX.Deploy", "CodeCrib.AX.Deploy\CodeCrib.AX.Deploy.csproj", "{287A3580-2245-41E6-B5B3-986E1F8C1F22}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeCrib.AX.TFS", "..\CodeCrib.AX.TFS\CodeCrib.AX.TFS\CodeCrib.AX.TFS.csproj", "{F622C66F-77C0-4965-B9CD-3871BC9EB71B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeCrib.AX.Config", "..\CodeCrib.AX.Config\CodeCrib.AX.Config\CodeCrib.AX.Config.csproj", "{E84F034B-0FEA-49A6-8CBA-B801CB494533}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeCrib.AX.Manage", "..\CodeCrib.AX.Manage\CodeCrib.AX.Manage\CodeCrib.AX.Manage.csproj", "{9696D89C-9DF8-43D0-B870-CBD4CABC8BA1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeCrib.AX.Client", "..\CodeCrib.AX.Client\CodeCrib.AX.Client\CodeCrib.AX.Client.csproj", "{9F793FC4-3616-44FA-8CED-6475C840BE00}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeCrib.AX.Deploy.PowerShell", "CodeCrib.AX.Deploy.PowerShell\CodeCrib.AX.Deploy.PowerShell.csproj", "{89B9B3F7-3A8A-44E7-A68C-AEC566185788}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{287A3580-2245-41E6-B5B3-986E1F8C1F22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{287A3580-2245-41E6-B5B3-986E1F8C1F22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{287A3580-2245-41E6-B5B3-986E1F8C1F22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{287A3580-2245-41E6-B5B3-986E1F8C1F22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F622C66F-77C0-4965-B9CD-3871BC9EB71B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F622C66F-77C0-4965-B9CD-3871BC9EB71B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F622C66F-77C0-4965-B9CD-3871BC9EB71B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F622C66F-77C0-4965-B9CD-3871BC9EB71B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E84F034B-0FEA-49A6-8CBA-B801CB494533}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E84F034B-0FEA-49A6-8CBA-B801CB494533}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E84F034B-0FEA-49A6-8CBA-B801CB494533}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E84F034B-0FEA-49A6-8CBA-B801CB494533}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9696D89C-9DF8-43D0-B870-CBD4CABC8BA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9696D89C-9DF8-43D0-B870-CBD4CABC8BA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9696D89C-9DF8-43D0-B870-CBD4CABC8BA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9696D89C-9DF8-43D0-B870-CBD4CABC8BA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F793FC4-3616-44FA-8CED-6475C840BE00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F793FC4-3616-44FA-8CED-6475C840BE00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F793FC4-3616-44FA-8CED-6475C840BE00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F793FC4-3616-44FA-8CED-6475C840BE00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89B9B3F7-3A8A-44E7-A68C-AEC566185788}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89B9B3F7-3A8A-44E7-A68C-AEC566185788}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89B9B3F7-3A8A-44E7-A68C-AEC566185788}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89B9B3F7-3A8A-44E7-A68C-AEC566185788}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

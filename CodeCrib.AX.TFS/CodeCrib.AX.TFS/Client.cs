@@ -140,9 +140,9 @@ namespace CodeCrib.AX.TFS
             string layer;
             string layerCode;
 
-            Helper.ExtractClientLayerModelInfo(configurationFile, layerCodes, modelManifest, out modelName, out publisher, out layer, out layerCode);
+            CodeCrib.AX.Deploy.Configs.ExtractClientLayerModelInfo(configurationFile, layerCodes, modelManifest, out modelName, out publisher, out layer, out layerCode);
 
-            var clientConfig = Helper.GetClientConfig(configurationFile);
+            var clientConfig = CodeCrib.AX.Deploy.Configs.GetClientConfig(configurationFile);
 
             Client.AutoRun.AxaptaAutoRun autoRun = new Client.AutoRun.AxaptaAutoRun() { ExitWhenDone = true, LogFile = string.Format(@"{0}\ImportLog-{1}.xml", Environment.ExpandEnvironmentVariables(clientConfig.LogDirectory), Guid.NewGuid()) };
             autoRun.Steps.Add(new Client.AutoRun.XpoImport() { File = xpoFile });
@@ -210,7 +210,7 @@ namespace CodeCrib.AX.TFS
             int timeoutMinutes = TimeOutMinutes.Get(context);
             string configurationFile = ConfigurationFile.Get(context);
 
-            var clientConfig = Helper.GetClientConfig(configurationFile);
+            var clientConfig = CodeCrib.AX.Deploy.Configs.GetClientConfig(configurationFile);
 
             Client.AutoRun.AxaptaAutoRun autoRun = new Client.AutoRun.AxaptaAutoRun() { ExitWhenDone = true, LogFile = string.Format(@"{0}\SynchronizeLog-{1}.xml", Environment.ExpandEnvironmentVariables(clientConfig.LogDirectory), Guid.NewGuid()) };
             autoRun.Steps.Add(new Client.AutoRun.Synchronize() { SyncDB = true, SyncRoles = true });
@@ -329,9 +329,9 @@ namespace CodeCrib.AX.TFS
             string layerCode;
             string modelManifest = ModelManifestFile.Get(context);
 
-            Helper.ExtractClientLayerModelInfo(configurationFile, layerCodes, modelManifest, out modelName, out publisher, out layer, out layerCode);
+            CodeCrib.AX.Deploy.Configs.ExtractClientLayerModelInfo(configurationFile, layerCodes, modelManifest, out modelName, out publisher, out layer, out layerCode);
 
-            var clientConfig = Helper.GetClientConfig(configurationFile);
+            var clientConfig = CodeCrib.AX.Deploy.Configs.GetClientConfig(configurationFile);
             Client.AutoRun.AxaptaAutoRun autoRun = new Client.AutoRun.AxaptaAutoRun() { ExitWhenDone = true, LogFile = string.Format(@"{0}\LabelFlushLog-{1}.xml", Environment.ExpandEnvironmentVariables(clientConfig.LogDirectory), Guid.NewGuid()) };
             Client.Commands.ImportLabelFile importCommand = new Client.Commands.ImportLabelFile() { ConfigurationFile = configurationFile, Layer = layer, LayerCode = layerCode, Model = modelName, ModelPublisher = publisher };
 
@@ -438,9 +438,9 @@ namespace CodeCrib.AX.TFS
             string layerCode;
             string modelManifest = ModelManifestFile.Get(context);
 
-            Helper.ExtractClientLayerModelInfo(configurationFile, layerCodes, modelManifest, out modelName, out publisher, out layer, out layerCode);
+            CodeCrib.AX.Deploy.Configs.ExtractClientLayerModelInfo(configurationFile, layerCodes, modelManifest, out modelName, out publisher, out layer, out layerCode);
 
-            var clientConfig = Helper.GetClientConfig(configurationFile);
+            var clientConfig = CodeCrib.AX.Deploy.Configs.GetClientConfig(configurationFile);
 
 
             Client.AutoRun.AxaptaAutoRun autoRun = new Client.AutoRun.AxaptaAutoRun() { ExitWhenDone = true, LogFile = string.Format(@"{0}\VSImportLog-{1}.xml", Environment.ExpandEnvironmentVariables(clientConfig.LogDirectory), Guid.NewGuid()) };

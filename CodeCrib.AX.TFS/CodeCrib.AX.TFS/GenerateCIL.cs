@@ -49,7 +49,7 @@ namespace CodeCrib.AX.TFS
             else
                 process = Client.Client.StartCommand(clientExePath, compile);
 
-            var alternateBinDirectory = Helper.GetServerConfig(configurationFile).AlternateBinDirectory;
+            var alternateBinDirectory = CodeCrib.AX.Deploy.Configs.GetServerConfig(configurationFile).AlternateBinDirectory;
 
             Func<int, int, Exception> processWaitDelegate = new Func<int, int, Exception>(CommandContext.WaitForProcess);
             context.UserState = new CommandContext { Delegate = processWaitDelegate, Process = process, AutoRun = null, AutoRunFile = null, LogFile = string.Format(@"{0}\XppIL\Dynamics.Ax.Application.dll.log", Environment.ExpandEnvironmentVariables(alternateBinDirectory)) };

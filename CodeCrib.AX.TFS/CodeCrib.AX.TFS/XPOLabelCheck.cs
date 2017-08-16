@@ -28,6 +28,8 @@ namespace CodeCrib.AX.TFS
             string folder = Folder.Get(context);
             bool recursive = Recursive.Get(context);
 
+            context.TrackBuildError("XPO Label check is deprecated. Use XPO Static analysis instead.");
+
             var xpoList = Client.XPOLabelCheck.FindTempLabels(folder, recursive);
             foreach (var xpo in xpoList)
             {

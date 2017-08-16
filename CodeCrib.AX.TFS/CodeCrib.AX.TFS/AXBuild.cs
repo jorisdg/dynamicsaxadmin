@@ -33,7 +33,7 @@ namespace CodeCrib.AX.TFS
             };
 
             string configurationFile = ConfigurationFile.Get(context);
-            string serverBinPath = Helper.GetServerConfig(configurationFile).AlternateBinDirectory;
+            string serverBinPath = CodeCrib.AX.Deploy.Configs.GetServerConfig(configurationFile).AlternateBinDirectory;
 
             if (string.IsNullOrEmpty(serverBinPath))
             {
@@ -43,11 +43,11 @@ namespace CodeCrib.AX.TFS
             string altBin = AlternateBinaryFolder.Get(context);
             if (string.IsNullOrEmpty(altBin))
             {
-                altBin = Helper.GetClientConfig(configurationFile).BinaryDirectory;
+                altBin = CodeCrib.AX.Deploy.Configs.GetClientConfig(configurationFile).BinaryDirectory;
             }
 
             compile.Compiler = Path.Combine(serverBinPath, "Ax32Serv.exe");
-            compile.AOSInstance = Helper.GetServerNumber(configurationFile).ToString("D2");
+            compile.AOSInstance = CodeCrib.AX.Deploy.Configs.GetServerNumber(configurationFile).ToString("D2");
             compile.AltBinDir = altBin;
 
             context.TrackBuildMessage("Compiling application using AXBuild", BuildMessageImportance.Normal);

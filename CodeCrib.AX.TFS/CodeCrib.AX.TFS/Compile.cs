@@ -64,7 +64,7 @@ namespace CodeCrib.AX.TFS
                     string layer;
                     string layerCode;
 
-                    Helper.ExtractClientLayerModelInfo(configurationFile, layerCodes, modelManifest, out model, out publisher, out layer, out layerCode);
+                    CodeCrib.AX.Deploy.Configs.ExtractClientLayerModelInfo(configurationFile, layerCodes, modelManifest, out model, out publisher, out layer, out layerCode);
 
                     compile.Model = model;
                     compile.ModelPublisher = publisher;
@@ -79,7 +79,7 @@ namespace CodeCrib.AX.TFS
             else
                 process = Client.Client.StartCommand(clientExePath, compile);
 
-            var clientConfig = Helper.GetClientConfig(configurationFile);
+            var clientConfig = CodeCrib.AX.Deploy.Configs.GetClientConfig(configurationFile);
 
             Func<int, int, Exception> processWaitDelegate = new Func<int, int, Exception>(CommandContext.WaitForProcess);
             context.UserState = new CommandContext { Delegate = processWaitDelegate, Process = process, AutoRun = null, AutoRunFile = null, LogFile = string.Format(@"{0}\{1}", Environment.ExpandEnvironmentVariables(clientConfig.LogDirectory), "AxCompileAll.html") };
@@ -191,7 +191,7 @@ namespace CodeCrib.AX.TFS
                     string layer;
                     string layerCode;
 
-                    Helper.ExtractClientLayerModelInfo(configurationFile, layerCodes, modelManifest, out model, out publisher, out layer, out layerCode);
+                    CodeCrib.AX.Deploy.Configs.ExtractClientLayerModelInfo(configurationFile, layerCodes, modelManifest, out model, out publisher, out layer, out layerCode);
 
                     command.Model = model;
                     command.ModelPublisher = publisher;

@@ -20,7 +20,7 @@ namespace CodeCrib.AX.TFS
         {
             int timeOutMinutes = TimeOutMinutes.Get(context);
             string configurationFile = ConfigurationFile.Get(context);
-            var aosNumber = Helper.GetServerNumber(configurationFile);
+            var aosNumber = CodeCrib.AX.Deploy.Configs.GetServerNumber(configurationFile);
 
             CodeCrib.AX.Manage.AOS aos = new Manage.AOS(aosNumber);
             aos.Stop(timeOutMinutes);
@@ -37,7 +37,7 @@ namespace CodeCrib.AX.TFS
         {
             int timeOutMinutes = TimeOutMinutes.Get(context);
             string configurationFile = ConfigurationFile.Get(context);
-            var aosNumber = Helper.GetServerNumber(configurationFile);
+            var aosNumber = CodeCrib.AX.Deploy.Configs.GetServerNumber(configurationFile);
 
             CodeCrib.AX.Manage.AOS aos = new Manage.AOS(aosNumber);
             aos.Start(timeOutMinutes);

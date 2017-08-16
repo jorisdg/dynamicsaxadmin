@@ -24,55 +24,16 @@ namespace CodeCrib.AX.TFS
 
         public InArgument<bool> LeaveXppIL { get; set; }
 
-        private void CleanFolder(string path, string filePattern)
-        {
-            if (System.IO.Directory.Exists(path))
-            {
-                IEnumerable<string> files = System.IO.Directory.EnumerateFiles(path, filePattern);
-                foreach (string file in files)
-                {
-                    System.IO.File.SetAttributes(file, FileAttributes.Normal);
-                    System.IO.File.Delete(file);
-                }
-            }
-        }
-
-        private void CleanFolders(string path, string pathPattern, string filePattern)
-        {
-            if (System.IO.Directory.Exists(path))
-            {
-                IEnumerable<string> folders = System.IO.Directory.EnumerateDirectories(path, pathPattern);
-                foreach (string folder in folders)
-                {
-                    CleanFolder(folder, filePattern);
-                }
-            }
-        }
-
         protected override void Execute(CodeActivityContext context)
         {
             bool leaveXppIL = LeaveXppIL.Get(context);
             string configurationFile = ConfigurationFile.Get(context);
-            var serverConfig = Helper.GetServerConfig(configurationFile);
 
-            context.TrackBuildMessage("Cleaning server label artifacts");
-            CleanFolder(string.Format(@"{0}\Application\Appl\Standard", serverConfig.AlternateBinDirectory), "ax*.al?");
+            context.TrackBuildMessage("Cleaning server artifacts");
+            CodeCrib.AX.Deploy.Clean.ServerCaches(configurationFile, leaveXppIL);
 
-            if (!leaveXppIL)
-            {
-                context.TrackBuildMessage("Cleaning server XppIL artifacts");
-                CleanFolder(string.Format(@"{0}\XppIL", serverConfig.AlternateBinDirectory), "*");
-            }
-
-            context.TrackBuildMessage("Cleaning server VSAssemblies artifacts");
-            CleanFolder(string.Format(@"{0}\VSAssemblies", serverConfig.AlternateBinDirectory), "*");
-
-            context.TrackBuildMessage("Cleaning client cache artifacts");
-            CleanFolder(System.Environment.GetEnvironmentVariable("localappdata"), "ax_*.auc");
-            CleanFolder(System.Environment.GetEnvironmentVariable("localappdata"), "ax*.kti");
-
-            context.TrackBuildMessage("Cleaning client VSAssemblies artifacts");
-            CleanFolders(string.Format(@"{0}\{1}", System.Environment.GetEnvironmentVariable("localappdata"), @"Microsoft\Dynamics Ax"), "VSAssemblies*", "*");
+            context.TrackBuildMessage("Cleaning client artifacts");
+            CodeCrib.AX.Deploy.Clean.ClientCaches();
         }
     }
 }

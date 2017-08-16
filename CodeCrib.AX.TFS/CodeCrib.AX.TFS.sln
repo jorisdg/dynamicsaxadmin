@@ -14,30 +14,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeCrib.AX.AXBuild", "..\CodeCrib.AX.AXBuild\CodeCrib.AX.AXBuild\CodeCrib.AX.AXBuild.csproj", "{C1E5B831-90A6-4AB5-80DD-7918F817AFE7}"
 EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 7
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs24
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = ..\\CodeCrib.AX.Client\\CodeCrib.AX.Client\\CodeCrib.AX.Client.csproj
-		SccProjectName1 = ../CodeCrib.AX.Client/CodeCrib.AX.Client
-		SccLocalPath1 = ..\\CodeCrib.AX.Client\\CodeCrib.AX.Client
-		SccProjectUniqueName2 = ..\\CodeCrib.AX.Config\\CodeCrib.AX.Config\\CodeCrib.AX.Config.csproj
-		SccProjectName2 = ../CodeCrib.AX.Config/CodeCrib.AX.Config
-		SccLocalPath2 = ..\\CodeCrib.AX.Config\\CodeCrib.AX.Config
-		SccProjectUniqueName3 = ..\\CodeCrib.AX.Manage\\CodeCrib.AX.Manage\\CodeCrib.AX.Manage.csproj
-		SccProjectName3 = ../CodeCrib.AX.Manage/CodeCrib.AX.Manage
-		SccLocalPath3 = ..\\CodeCrib.AX.Manage\\CodeCrib.AX.Manage
-		SccProjectUniqueName4 = CodeCrib.AX.TFS\\CodeCrib.AX.TFS.csproj
-		SccProjectName4 = CodeCrib.AX.TFS
-		SccLocalPath4 = CodeCrib.AX.TFS
-		SccProjectUniqueName5 = ..\\CodeCrib.AX.Sql\\CodeCrib.AX.Sql\\CodeCrib.AX.Sql.csproj
-		SccProjectName5 = ../CodeCrib.AX.Sql/CodeCrib.AX.Sql
-		SccLocalPath5 = ..\\CodeCrib.AX.Sql\\CodeCrib.AX.Sql
-		SccProjectUniqueName6 = ..\\CodeCrib.AX.AXBuild\\CodeCrib.AX.AXBuild\\CodeCrib.AX.AXBuild.csproj
-		SccProjectName6 = ../CodeCrib.AX.AXBuild/CodeCrib.AX.AXBuild
-		SccLocalPath6 = ..\\CodeCrib.AX.AXBuild\\CodeCrib.AX.AXBuild
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU

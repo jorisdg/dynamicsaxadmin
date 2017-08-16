@@ -4,14 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeCrib.AX.AXBuild", "CodeCrib.AX.AXBuild.csproj", "{C1E5B831-90A6-4AB5-80DD-7918F817AFE7}"
 EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 2
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs24
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = CodeCrib.AX.AXBuild.csproj
-		SccLocalPath1 = .
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU

@@ -8,21 +8,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeCrib.AX.Setup.PowerShell", "CodeCrib.AX.Setup.PowerShell\CodeCrib.AX.Setup.PowerShell.csproj", "{6707D0A5-4582-4875-9826-C5CD9C6E2C9B}"
 EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 4
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs24
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = AxSetup\\AxSetup.csproj
-		SccProjectName1 = AxSetup
-		SccLocalPath1 = AxSetup
-		SccProjectUniqueName2 = CodeCrib.AX.Setup\\CodeCrib.AX.Setup.csproj
-		SccProjectName2 = CodeCrib.AX.Setup
-		SccLocalPath2 = CodeCrib.AX.Setup
-		SccProjectUniqueName3 = CodeCrib.AX.Setup.PowerShell\\CodeCrib.AX.Setup.PowerShell.csproj
-		SccProjectName3 = CodeCrib.AX.Setup.PowerShell
-		SccLocalPath3 = CodeCrib.AX.Setup.PowerShell
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU

@@ -18,10 +18,10 @@ namespace CodeCrib.AX.Deploy
 
             if (!hostName.EndsWith(domainName))  // if hostname does not already include domain name
             {
-                hostName += "." + domainName;   // add the domain name part
+                hostName = String.Concat(hostName, ".", domainName); // add the domain name part
             }
 
-            return hostName;                    // return the fully qualified name
+            return hostName; // return the fully qualified name
         }
 
         public static CodeCrib.AX.Config.Client GetClientConfig(string clientConfigFile)
@@ -93,7 +93,7 @@ namespace CodeCrib.AX.Deploy
 
             Config.Server serverConfig = GetServerConfig(configurationFile);
             CodeCrib.AX.Manage.ModelStore modelStore = null;
-            if (serverConfig.AOSVersionOrigin.Substring(0, 3) == "6.0")
+            if (serverConfig.AOSVersionOrigin.Substring(0, 3).Equals("6.0"))
             {
                 modelStore = new Manage.ModelStore(serverConfig.DatabaseServer, string.Format("{0}", serverConfig.Database));
             }
@@ -148,7 +148,8 @@ namespace CodeCrib.AX.Deploy
         {
             using (BufferedStream fileReader = new BufferedStream(new FileStream(fileInfo.FullName, FileMode.Open)))
             {
-                using (FileStream fileStream = new FileStream(fileInfo.FullName + ".gz", FileMode.Create))
+                String compressedFilename = String.Concat(fileInfo.FullName, ".gz");
+                using (FileStream fileStream = new FileStream(compressedFilename, FileMode.Create))
                 using (BufferedStream bufferedStream = new BufferedStream(fileStream))
                 using (GZipStream fileWriter = new GZipStream(bufferedStream, CompressionMode.Compress))
                 {

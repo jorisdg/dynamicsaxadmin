@@ -120,7 +120,7 @@ namespace CodeCrib.AX.Manage
                 parameters = String.Format("{0} \"/key:{1}\"", parameters, strongNameKeyFile);
             }
 
-            ProcessStartInfo processStartInfo = new ProcessStartInfo(axutilBinaryFolder + @"\axutil.exe", parameters);
+            ProcessStartInfo processStartInfo = new ProcessStartInfo(String.Concat(axutilBinaryFolder, @"\axutil.exe"), parameters);
             processStartInfo.WindowStyle = ProcessWindowStyle.Minimized;
             processStartInfo.WorkingDirectory = axutilBinaryFolder;
             processStartInfo.RedirectStandardError = true;
@@ -173,7 +173,7 @@ namespace CodeCrib.AX.Manage
         {
             string parameters = String.Format("exportstore /s:{0} /db:{1} \"/file:{2}\"", dbServer, dbName, modelStoreFile);
 
-            ProcessStartInfo processStartInfo = new ProcessStartInfo(axutilBinaryFolder + @"\axutil.exe", parameters);
+            ProcessStartInfo processStartInfo = new ProcessStartInfo(String.Concat(axutilBinaryFolder, @"\axutil.exe"), parameters);
             processStartInfo.WindowStyle = ProcessWindowStyle.Minimized;
             processStartInfo.WorkingDirectory = axutilBinaryFolder;
             processStartInfo.RedirectStandardError = true;
@@ -303,7 +303,7 @@ namespace CodeCrib.AX.Manage
         {
             string parameters = String.Format("import /s:{0} /db:{1} \"/file:{2}\" /conflict:{3} /noPrompt", dbServer, dbName, modelFile, resolverType.ToString());
 
-            ProcessStartInfo processStartInfo = new ProcessStartInfo(axutilBinaryFolder + @"\axutil.exe", parameters);
+            ProcessStartInfo processStartInfo = new ProcessStartInfo(String.Concat(axutilBinaryFolder, @"\axutil.exe"), parameters);
             processStartInfo.WindowStyle = ProcessWindowStyle.Minimized;
             processStartInfo.WorkingDirectory = axutilBinaryFolder;
             processStartInfo.RedirectStandardError = true;
@@ -391,7 +391,7 @@ namespace CodeCrib.AX.Manage
 
         protected static string GetUtilContextErrorStr(AxUtilContext utilContext)
         {
-            string errorStr = "";
+            string errorStr = String.Empty;
             foreach (string error in utilContext.Errors)
             {
                 if (!string.IsNullOrEmpty(error))
@@ -409,7 +409,7 @@ namespace CodeCrib.AX.Manage
 
             //Retrieve the list of referenced assemblies in an array of AssemblyName.
             Assembly MyAssembly = null, objExecutingAssemblies;
-            string strTempAssmbPath = "";
+            string strTempAssmbPath = String.Empty;
 
             objExecutingAssemblies = Assembly.GetExecutingAssembly();
             AssemblyName[] arrReferencedAssmbNames = objExecutingAssemblies.GetReferencedAssemblies();
@@ -419,9 +419,9 @@ namespace CodeCrib.AX.Manage
             {
                 string name = args.Name.Substring(0, args.Name.IndexOf(","));
                 //Check for the assembly names that have raised the "AssemblyResolve" event.
-                if (strAssmbName.FullName.Substring(0, strAssmbName.FullName.IndexOf(",")) == name)
+                if (strAssmbName.FullName.Substring(0, strAssmbName.FullName.IndexOf(",")).Equals(name))
                 {
-                    if (name.ToLower() == "axutillib")
+                    if (name.Equals("axutillib", StringComparison.CurrentCultureIgnoreCase))
                     {
                         //Build the path of the assembly from where it has to be loaded.				
                         RegistryKey AXInstall = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Dynamics\6.0\Setup");

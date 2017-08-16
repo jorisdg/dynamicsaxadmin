@@ -74,7 +74,7 @@ namespace CodeCrib.AX.TFS
                     foreach (var obj in mos.Get())
                     {
                         string processName = (string)obj.Properties["Name"].Value;
-                        if (processName == "Ax32Serv.exe")
+                        if (processName.Equals("Ax32Serv.exe", StringComparison.CurrentCultureIgnoreCase))
                         {
                             UInt32 pid = (UInt32)obj.Properties["ProcessId"].Value;
                             if (pid != 0)

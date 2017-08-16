@@ -39,7 +39,7 @@ namespace CodeCrib.AX.TFS
             var serverConfig = CodeCrib.AX.Deploy.Configs.GetServerConfig(configurationFile);
 
             CodeCrib.AX.Manage.ModelStore store = null;
-            if (serverConfig.AOSVersionOrigin.Substring(0, 3) == "6.0")
+            if (serverConfig.AOSVersionOrigin.Substring(0, 3).Equals("6.0"))
             {
                 store = new Manage.ModelStore(serverConfig.DatabaseServer, string.Format("{0}", serverConfig.Database));
             }
@@ -83,7 +83,7 @@ namespace CodeCrib.AX.TFS
             var serverConfig = CodeCrib.AX.Deploy.Configs.GetServerConfig(configurationFile);
 
             CodeCrib.AX.Manage.ModelStore store = null;
-            if (serverConfig.AOSVersionOrigin.Substring(0, 3) == "6.0")
+            if (serverConfig.AOSVersionOrigin.Substring(0, 3).Equals("6.0"))
             {
                 store = new Manage.ModelStore(serverConfig.DatabaseServer, string.Format("{0}", serverConfig.Database), axutilFolder);
             }
@@ -117,7 +117,7 @@ namespace CodeCrib.AX.TFS
             var serverConfig = CodeCrib.AX.Deploy.Configs.GetServerConfig(configurationFile);
 
             CodeCrib.AX.Manage.ModelStore store = null;
-            if (serverConfig.AOSVersionOrigin.Substring(0, 3) == "6.0")
+            if (serverConfig.AOSVersionOrigin.Substring(0, 3).Equals("6.0"))
             {
                 store = new Manage.ModelStore(serverConfig.DatabaseServer, string.Format("{0}", serverConfig.Database));
             }
@@ -160,7 +160,7 @@ namespace CodeCrib.AX.TFS
             bool compressModelStore = CompressModelStore.Get(context);
 
             CodeCrib.AX.Manage.ModelStore store = null;
-            if (serverConfig.AOSVersionOrigin.Substring(0, 3) == "6.0")
+            if (serverConfig.AOSVersionOrigin.Substring(0, 3).Equals("6.0"))
             {
                 store = new Manage.ModelStore(serverConfig.DatabaseServer, string.Format("{0}", serverConfig.Database), axutilFolder);
             }
@@ -196,7 +196,7 @@ namespace CodeCrib.AX.TFS
             var serverConfig = CodeCrib.AX.Deploy.Configs.GetServerConfig(configurationFile);
 
             CodeCrib.AX.Manage.ModelStore store = null;
-            if (serverConfig.AOSVersionOrigin.Substring(0, 3) == "6.0")
+            if (serverConfig.AOSVersionOrigin.Substring(0, 3).Equals("6.0"))
             {
                 store = new Manage.ModelStore(serverConfig.DatabaseServer, string.Format("{0}", serverConfig.Database));
             }
@@ -229,7 +229,7 @@ namespace CodeCrib.AX.TFS
             var serverConfig = CodeCrib.AX.Deploy.Configs.GetServerConfig(configurationFile);
 
             CodeCrib.AX.Manage.ModelStore store = null;
-            if (serverConfig.AOSVersionOrigin.Substring(0, 3) == "6.0")
+            if (serverConfig.AOSVersionOrigin.Substring(0, 3).Equals("6.0"))
             {
                 store = new Manage.ModelStore(serverConfig.DatabaseServer, string.Format("{0}", serverConfig.Database));
             }
@@ -263,7 +263,7 @@ namespace CodeCrib.AX.TFS
             var serverConfig = CodeCrib.AX.Deploy.Configs.GetServerConfig(configurationFile);
 
             CodeCrib.AX.Manage.ModelStore store = null;
-            if (serverConfig.AOSVersionOrigin.Substring(0, 3) == "6.0")
+            if (serverConfig.AOSVersionOrigin.Substring(0, 3).Equals("6.0"))
             {
                 store = new Manage.ModelStore(serverConfig.DatabaseServer, string.Format("{0}", serverConfig.Database));
             }

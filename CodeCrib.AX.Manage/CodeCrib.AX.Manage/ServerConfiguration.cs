@@ -246,7 +246,7 @@ namespace CodeCrib.AX.Manage
             GDS.EntityKey[] keys = new GDS.EntityKey[1];
             keys[0] = new GDS.EntityKey();
             keys[0].KeyData = new GDS.KeyField[1];
-            keys[0].KeyData[0] = new GDS.KeyField() { Field = "", Value = ""};
+            keys[0].KeyData[0] = new GDS.KeyField() { Field = String.Empty, Value = string.Empty };
 
             //gdsClient.update(callContext, metaData, keys, "");
             //gdsClient.find(callContext, meta

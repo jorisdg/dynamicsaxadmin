@@ -1,0 +1,52 @@
+﻿<Window x:Class="AxSetup.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Silent Mode Parameter Files" Height="350" Width="525">
+    <Grid Grid.IsSharedSizeScope="True" Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Button Margin="0 0 10 0" Click="OpenButton_Click">
+                <TextBlock>Open</TextBlock>
+            </Button>
+            <Button Margin="0 0 10 0" Click="SaveButton_Click">
+                <TextBlock>Save</TextBlock>
+            </Button>
+            <Button Margin="0 0 10 0" Click="ParseLogFileButton_Click">
+                <TextBlock>Parse Log File</TextBlock>
+            </Button>
+            <Button Margin="0 0 10 0" Click="RunSetupButton_Click">
+                <TextBlock>Run Setup</TextBlock>
+            </Button>
+        </StackPanel>
+        <Grid Grid.Row="1" Margin="7 0 0 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition SharedSizeGroup="EnabledColumn"/>
+                <ColumnDefinition SharedSizeGroup="NameColumn"/>
+                <ColumnDefinition SharedSizeGroup="ValueColumn"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="Enabled" HorizontalAlignment="Center" />
+            <TextBlock Grid.Column="1" Text="Name" HorizontalAlignment="Center" />
+            <TextBlock Grid.Column="2" Text="Value" HorizontalAlignment="Center" />
+        </Grid>
+        <ListView Name="ParameterListView" Grid.Row="2">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition SharedSizeGroup="EnabledColumn"/>
+                            <ColumnDefinition SharedSizeGroup="NameColumn"/>
+                            <ColumnDefinition SharedSizeGroup="ValueColumn"/>
+                        </Grid.ColumnDefinitions>
+                        <CheckBox Grid.Column="0" IsChecked="{Binding Enabled}" />
+                        <TextBox Grid.Column="1" Text="{Binding Name}" />
+                        <TextBox Grid.Column="2" Text="{Binding Value}" />
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</Window>

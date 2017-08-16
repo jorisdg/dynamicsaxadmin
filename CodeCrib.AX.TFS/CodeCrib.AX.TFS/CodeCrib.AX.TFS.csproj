@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F622C66F-77C0-4965-B9CD-3871BC9EB71B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CodeCrib.AX.TFS</RootNamespace>
+    <AssemblyName>CodeCrib.AX.TFS</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.TeamFoundation.Build.Client, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.TeamFoundation.Build.Workflow, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Activities" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AOSService.cs" />
+    <Compile Include="AXBuild.cs" />
+    <Compile Include="Clean.cs" />
+    <Compile Include="CombineXPOs.cs" />
+    <Compile Include="Compile.cs" />
+    <Compile Include="Client.cs" />
+    <Compile Include="CopyReferences.cs" />
+    <Compile Include="ModelStore.cs" />
+    <Compile Include="GenerateCIL.cs" />
+    <Compile Include="Helper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Database.cs" />
+    <Compile Include="SetAOSDatabase.cs" />
+    <Compile Include="XPOLabelCheck.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\CodeCrib.AX.AXBuild\CodeCrib.AX.AXBuild\CodeCrib.AX.AXBuild.csproj">
+      <Project>{c1e5b831-90a6-4ab5-80dd-7918f817afe7}</Project>
+      <Name>CodeCrib.AX.AXBuild</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\CodeCrib.AX.Client\CodeCrib.AX.Client\CodeCrib.AX.Client.csproj">
+      <Project>{9f793fc4-3616-44fa-8ced-6475c840be00}</Project>
+      <Name>CodeCrib.AX.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\CodeCrib.AX.Config\CodeCrib.AX.Config\CodeCrib.AX.Config.csproj">
+      <Project>{e84f034b-0fea-49a6-8cba-b801cb494533}</Project>
+      <Name>CodeCrib.AX.Config</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\CodeCrib.AX.Manage\CodeCrib.AX.Manage\CodeCrib.AX.Manage.csproj">
+      <Project>{9696d89c-9df8-43d0-b870-cbd4cabc8ba1}</Project>
+      <Name>CodeCrib.AX.Manage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\CodeCrib.AX.Sql\CodeCrib.AX.Sql\CodeCrib.AX.Sql.csproj">
+      <Project>{5d785ef3-abf3-4038-8711-de346d55c5d3}</Project>
+      <Name>CodeCrib.AX.Sql</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

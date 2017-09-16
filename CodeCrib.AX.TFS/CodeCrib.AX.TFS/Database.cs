@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Activities;
 using Microsoft.TeamFoundation.Build.Client;
 using Microsoft.TeamFoundation.Build.Workflow.Activities;
+using CodeCrib.AX.BuildTasks;
 
 namespace CodeCrib.AX.TFS
 {
@@ -33,17 +34,8 @@ namespace CodeCrib.AX.TFS
             string backupFilePath = BackupFilePath.Get(context);
             string configurationFile = ConfigurationFile.Get(context);
 
-            if (string.IsNullOrEmpty(serverName))
-            {
-                var serverConfig = CodeCrib.AX.Deploy.Configs.GetServerConfig(configurationFile);
-                serverName = serverConfig.DatabaseServer;
-            }
-
-            context.TrackBuildMessage(String.Format("Restoring database {0} on server {1} from file {2}", databaseName, serverName, backupFilePath));
-
-            Sql.DbManagement.RestoreDbFromFile(serverName, databaseName, backupFilePath);
-
-            context.TrackBuildMessage("Database restore complete");
+            RestoreDatabaseTask task = new RestoreDatabaseTask(context.DefaultLogger(), serverName, databaseName, configurationFile, backupFilePath);
+            task.Run();
         }
     }
 
@@ -68,17 +60,8 @@ namespace CodeCrib.AX.TFS
             bool forceCompressionOn = ForceCompressionOn.Get(context);
             string configurationFile = ConfigurationFile.Get(context);
 
-            if (string.IsNullOrEmpty(serverName))
-            {
-                var serverConfig = CodeCrib.AX.Deploy.Configs.GetServerConfig(configurationFile);
-                serverName = serverConfig.DatabaseServer;
-            }
-
-            context.TrackBuildMessage(String.Format("Backing up database {0} from server {1} to file {2}", databaseName, serverName, backupFilePath));
-
-            Sql.DbManagement.BackupDbToFile(serverName, databaseName, backupFilePath, true, overwriteBackupSets, forceCompressionOn);
-
-            context.TrackBuildMessage("Database backup complete");
+            BackupDatabaseTask task = new BackupDatabaseTask(context.DefaultLogger(), serverName, databaseName, configurationFile, backupFilePath, overwriteBackupSets, forceCompressionOn);
+            task.Run();
         }
     }
 

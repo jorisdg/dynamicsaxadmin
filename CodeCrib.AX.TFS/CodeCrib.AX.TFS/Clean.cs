@@ -14,6 +14,7 @@ using System.Activities;
 using Microsoft.TeamFoundation.Build.Client;
 using Microsoft.TeamFoundation.Build.Workflow.Activities;
 using System.IO;
+using CodeCrib.AX.BuildTasks;
 
 namespace CodeCrib.AX.TFS
 {
@@ -29,11 +30,8 @@ namespace CodeCrib.AX.TFS
             bool leaveXppIL = LeaveXppIL.Get(context);
             string configurationFile = ConfigurationFile.Get(context);
 
-            context.TrackBuildMessage("Cleaning server artifacts");
-            CodeCrib.AX.Deploy.Clean.ServerCaches(configurationFile, leaveXppIL);
-
-            context.TrackBuildMessage("Cleaning client artifacts");
-            CodeCrib.AX.Deploy.Clean.ClientCaches();
+            CleanTask task = new CleanTask(context.DefaultLogger(), leaveXppIL, configurationFile);
+            task.Run();
         }
     }
 }

@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Activities;
 using Microsoft.TeamFoundation.Build.Client;
 using Microsoft.TeamFoundation.Build.Workflow.Activities;
+using CodeCrib.AX.BuildTasks;
 
 namespace CodeCrib.AX.TFS
 {
@@ -37,16 +38,8 @@ namespace CodeCrib.AX.TFS
             bool includeSystemObjects = IncludeSystemObjects.Get(context);
             bool includeNonSystemObjects = IncludeNonSystemObjects.Get(context);
 
-            if (!System.IO.Directory.Exists(System.IO.Path.GetDirectoryName(combinedXPOFile)))
-                System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(combinedXPOFile));
-
-            if (includeNonSystemObjects && includeSystemObjects)
-                CodeCrib.AX.Client.CombineXPOs.Combine(folder, recursive, combinedXPOFile, Client.CombineXPOs.IncludeObjects.AllObjects);
-            else if (includeNonSystemObjects && !includeSystemObjects)
-                CodeCrib.AX.Client.CombineXPOs.Combine(folder, recursive, combinedXPOFile, Client.CombineXPOs.IncludeObjects.ExcludeSystemObjects);
-            else if (!includeNonSystemObjects && includeSystemObjects)
-                CodeCrib.AX.Client.CombineXPOs.Combine(folder, recursive, combinedXPOFile, Client.CombineXPOs.IncludeObjects.SystemObjectsOnly);
-            // else neither
+            CombineXPOsTask task = new CombineXPOsTask(context.DefaultLogger(), folder, recursive, combinedXPOFile, includeSystemObjects, includeNonSystemObjects);
+            task.Run();
         }
     }
 }

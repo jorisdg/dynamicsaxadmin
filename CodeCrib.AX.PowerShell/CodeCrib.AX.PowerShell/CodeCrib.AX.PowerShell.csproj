@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{46A2DA42-B510-42EF-B64E-8752E62B40C6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CodeCrib.AX.PowerShell</RootNamespace>
+    <AssemblyName>CodeCrib.AX.PowerShell</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\CodeCrib.AX.Client\CodeCrib.AX.Client.PowerShell\CodeCrib.AX.Client.PowerShell.csproj">
+      <Project>{1531becd-52c7-4d55-873f-e0ed8ea00b68}</Project>
+      <Name>CodeCrib.AX.Client.PowerShell</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\CodeCrib.AX.Config\CodeCrib.AX.Config.PowerShell\CodeCrib.AX.Config.PowerShell.csproj">
+      <Project>{cd47d20e-260c-4d33-a3e7-a0e9a801df58}</Project>
+      <Name>CodeCrib.AX.Config.PowerShell</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\CodeCrib.AX.Deploy\CodeCrib.AX.Deploy.PowerShell\CodeCrib.AX.Deploy.PowerShell.csproj">
+      <Project>{89b9b3f7-3a8a-44e7-a68c-aec566185788}</Project>
+      <Name>CodeCrib.AX.Deploy.PowerShell</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\CodeCrib.AX.Manage\CodeCrib.AX.Manage.PowerShell\CodeCrib.AX.Manage.PowerShell.csproj">
+      <Project>{910ddb69-0ce4-4486-b5e3-c2f6ec2422df}</Project>
+      <Name>CodeCrib.AX.Manage.PowerShell</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\CodeCrib.AX.Setup\CodeCrib.AX.Setup.PowerShell\CodeCrib.AX.Setup.PowerShell.csproj">
+      <Project>{6707d0a5-4582-4875-9826-c5cd9c6e2c9b}</Project>
+      <Name>CodeCrib.AX.Setup.PowerShell</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\CodeCrib.AX.Sql\CodeCrib.AX.Sql.PowerShell\CodeCrib.AX.Sql.PowerShell.csproj">
+      <Project>{d6765785-9568-4a8c-a6cb-6aeebec7acc1}</Project>
+      <Name>CodeCrib.AX.Sql.PowerShell</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CodeCrib.AX.PowerShell.psd1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

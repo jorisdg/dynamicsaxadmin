@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Activities;
 using Microsoft.TeamFoundation.Build.Client;
 using Microsoft.TeamFoundation.Build.Workflow.Activities;
+using CodeCrib.AX.BuildTasks;
 
 namespace CodeCrib.AX.TFS
 {
@@ -20,10 +21,9 @@ namespace CodeCrib.AX.TFS
         {
             int timeOutMinutes = TimeOutMinutes.Get(context);
             string configurationFile = ConfigurationFile.Get(context);
-            var aosNumber = CodeCrib.AX.Deploy.Configs.GetServerNumber(configurationFile);
 
-            CodeCrib.AX.Manage.AOS aos = new Manage.AOS(aosNumber);
-            aos.Stop(timeOutMinutes);
+            AOSStopTask task = new AOSStopTask(context.DefaultLogger(), timeOutMinutes, configurationFile);
+            task.Run();
         }
     }
 
@@ -37,10 +37,9 @@ namespace CodeCrib.AX.TFS
         {
             int timeOutMinutes = TimeOutMinutes.Get(context);
             string configurationFile = ConfigurationFile.Get(context);
-            var aosNumber = CodeCrib.AX.Deploy.Configs.GetServerNumber(configurationFile);
 
-            CodeCrib.AX.Manage.AOS aos = new Manage.AOS(aosNumber);
-            aos.Start(timeOutMinutes);
+            AOSStartTask task = new AOSStartTask(context.DefaultLogger(), timeOutMinutes, configurationFile);
+            task.Run();
         }
     }
 }

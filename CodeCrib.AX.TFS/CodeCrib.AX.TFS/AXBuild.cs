@@ -11,6 +11,7 @@ using System.Activities;
 using System.IO;
 using System.Diagnostics;
 using System.Management;
+using CodeCrib.AX.BuildTasks;
 
 namespace CodeCrib.AX.TFS
 {

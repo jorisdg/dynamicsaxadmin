@@ -54,6 +54,11 @@ namespace CodeCrib.AX.Client
             combine.Combine(files, combinedXPOFilename);
         }
 
+        public static void Combine(object folder, object recursive, object combinedXPOFile, IncludeObjects allObjects)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Combine(List<string> files, string combinedXPOFilename)
         {
             if (files.Count != 0)

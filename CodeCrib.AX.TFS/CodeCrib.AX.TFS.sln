@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeCrib.AX.TFS", "CodeCrib.AX.TFS\CodeCrib.AX.TFS.csproj", "{F622C66F-77C0-4965-B9CD-3871BC9EB71B}"
 EndProject
@@ -16,6 +16,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeCrib.AX.AXBuild", "..\CodeCrib.AX.AXBuild\CodeCrib.AX.AXBuild\CodeCrib.AX.AXBuild.csproj", "{C1E5B831-90A6-4AB5-80DD-7918F817AFE7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeCrib.AX.Deploy", "..\CodeCrib.AX.Deploy\CodeCrib.AX.Deploy\CodeCrib.AX.Deploy.csproj", "{287A3580-2245-41E6-B5B3-986E1F8C1F22}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeCrib.AX.BuildTasks", "..\CodeCrib.AX.BuildTasks\CodeCrib.AX.BuildTasks.csproj", "{73FC195C-5812-4D3C-9895-033E77B2FE1A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,8 +53,15 @@ Global
 		{287A3580-2245-41E6-B5B3-986E1F8C1F22}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{287A3580-2245-41E6-B5B3-986E1F8C1F22}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{287A3580-2245-41E6-B5B3-986E1F8C1F22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73FC195C-5812-4D3C-9895-033E77B2FE1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73FC195C-5812-4D3C-9895-033E77B2FE1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73FC195C-5812-4D3C-9895-033E77B2FE1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73FC195C-5812-4D3C-9895-033E77B2FE1A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DDDDACCC-9420-4684-9094-CDAFD290EDD2}
 	EndGlobalSection
 EndGlobal

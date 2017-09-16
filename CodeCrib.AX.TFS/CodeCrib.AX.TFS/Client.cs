@@ -14,105 +14,13 @@ using Microsoft.TeamFoundation.Build.Workflow.Activities;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
+using CodeCrib.AX.BuildTasks;
 
 namespace CodeCrib.AX.TFS
 {
-    class AutoRunLogOutput
-    {
-        protected static void OutputLog(CodeActivityContext context, List<KeyValuePair<string, string>> log, bool outputAllAsInfo = false)
-        {
-            if (log != null)
-            {
-                foreach (var message in log)
-                {
-                    if (outputAllAsInfo)
-                    {
-                        context.TrackBuildMessage(message.Value);
-                    }
-                    else
-                    {
-                        switch (message.Key)
-                        {
-                            case "Info":
-                                context.TrackBuildMessage(message.Value);
-                                break;
-                            case "Warning":
-                                context.TrackBuildWarning(message.Value);
-                                break;
-                            case "Error":
-                                context.TrackBuildError(message.Value);
-                                break;
-                        }
-                    }
-                }
-            }
-        }
+    
 
-        public static void Output(CodeActivityContext context, Client.AutoRun.AxaptaAutoRun autoRun, bool outputAllAsInfo = false, bool skipInfoLog = false)
-        {
-            autoRun.ParseLog();
 
-            //OutputLog(context, autoRun.Log, outputAllAsInfo);
-
-            foreach (var step in autoRun.Steps)
-            {
-                OutputLog(context, step.Log, outputAllAsInfo);
-            }
-
-            if (!skipInfoLog && !string.IsNullOrEmpty(autoRun.InfoLog))
-            {
-                var lines = autoRun.InfoLog.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries).ToList();
-                foreach (string line in lines)
-                {
-                    context.TrackBuildMessage(line.Trim());
-                }
-            }
-        }
-    }
-
-    class CommandContext
-    {
-        public Func<int, int, Exception> Delegate { get; set; }
-        public Process Process { get; set; }
-        public Client.AutoRun.AxaptaAutoRun AutoRun { get; set; }
-        public string AutoRunFile { get; set; }
-        public string LogFile { get; set; }
-
-        public static Exception WaitForProcess(int processId, int timeOutMinutes)
-        {
-            Exception returnException = null;
-
-            if (processId != 0)
-            {
-                Process process = Process.GetProcessById(processId);
-
-                if (timeOutMinutes > 0)
-                {
-                    if (!process.WaitForExit((int)new TimeSpan(0, timeOutMinutes, 0).TotalMilliseconds))
-                    {
-                        // Process is still running after the timeout has elapsed.
-
-                        try
-                        {
-                            process.Kill();
-                            returnException = new TimeoutException(string.Format("Client time out of {0} minutes exceeded", timeOutMinutes));
-                        }
-                        catch (Exception ex)
-                        {
-                            // Error trying to kill the process
-                            returnException = new TimeoutException(string.Format("Client time out of {0} minutes exceeded, additionally an exception was encountered while trying to kill the client process (see innerexception)", timeOutMinutes), ex);
-                        }
-                    }
-                }
-                else
-                {
-                    process.WaitForExit();
-                }
-            }
-
-            return returnException;
-        }
-    }
 
     [BuildActivity(HostEnvironmentOption.Agent)]
     public class ImportXPO : AsyncCodeActivity
@@ -189,7 +97,7 @@ namespace CodeCrib.AX.TFS
                 if (processWaitException != null)
                     throw processWaitException;
 
-                AutoRunLogOutput.Output(context, userState.AutoRun, true);
+                AutoRunLogOutput.Output(context.DefaultLogger(), userState.AutoRun, true);
 
                 if (File.Exists(userState.LogFile))
                     File.Delete(userState.LogFile);
@@ -256,7 +164,7 @@ namespace CodeCrib.AX.TFS
                 if (processWaitException != null)
                     throw processWaitException;
 
-                AutoRunLogOutput.Output(context, userState.AutoRun);
+                AutoRunLogOutput.Output(context.DefaultLogger(), userState.AutoRun);
 
                 if (File.Exists(userState.LogFile))
                     File.Delete(userState.LogFile);
@@ -279,98 +187,41 @@ namespace CodeCrib.AX.TFS
 
         public InArgument<int> TimeOutMinutes { get; set; }
 
-        public static bool IsEmptyLabelFile(string labelFile)
-        {
-            bool isEmptyFile = true;
-
-            if (File.Exists(labelFile))
-            {
-                using (StreamReader streamReader = new StreamReader(File.OpenRead(labelFile)))
-                {
-                    int lineCounter = 0;
-                    while (isEmptyFile && !streamReader.EndOfStream && lineCounter < 50)
-                    {
-                        string line = streamReader.ReadLine().Trim();
-
-                        Match match = Regex.Match(line, @"@.{3}\d+\s.+");
-                        if (match.Success)
-                        {
-                            isEmptyFile = false;
-                        }
-
-                        lineCounter++;
-                    }
-                }
-            }
-
-            return isEmptyFile;
-        }
-
         protected override IAsyncResult BeginExecute(AsyncCodeActivityContext context, AsyncCallback callback, object state)
         {
             int timeoutMinutes = TimeOutMinutes.Get(context);
             string configurationFile = ConfigurationFile.Get(context);
             StringList layerCodes = LayerCodes.Get(context);
             string labelFilesFolder = LabelFilesFolder.Get(context);
-            
-            if (!Directory.Exists(labelFilesFolder))
-            {
-                context.TrackBuildWarning(string.Format("Label file folder {0} not found.", labelFilesFolder));
+            string modelManifest = ModelManifestFile.Get(context);
 
+            ClientImportLabelsTask importer = new ClientImportLabelsTask(context.DefaultLogger(), timeoutMinutes, configurationFile, layerCodes, modelManifest, labelFilesFolder);
+
+            if (!importer.CheckLabelDirectoryExists())
+            {
                 // TODO Is there a better way with this? can we just return null or something?
                 Func<int, int, Exception> bogusDelegate = new Func<int, int, Exception>(CommandContext.WaitForProcess);
                 context.UserState = new CommandContext { Delegate = bogusDelegate, Process = null, AutoRun = null, AutoRunFile = null };
                 return bogusDelegate.BeginInvoke(0, 0, callback, state);
             }
 
-            string modelName;
-            string publisher;
-            string layer;
-            string layerCode;
-            string modelManifest = ModelManifestFile.Get(context);
-
-            CodeCrib.AX.Deploy.Configs.ExtractClientLayerModelInfo(configurationFile, layerCodes, modelManifest, out modelName, out publisher, out layer, out layerCode);
-
-            var clientConfig = CodeCrib.AX.Deploy.Configs.GetClientConfig(configurationFile);
-            Client.AutoRun.AxaptaAutoRun autoRun = new Client.AutoRun.AxaptaAutoRun() { ExitWhenDone = true, LogFile = string.Format(@"{0}\LabelFlushLog-{1}.xml", Environment.ExpandEnvironmentVariables(clientConfig.LogDirectory), Guid.NewGuid()) };
-            Client.Commands.ImportLabelFile importCommand = new Client.Commands.ImportLabelFile() { ConfigurationFile = configurationFile, Layer = layer, LayerCode = layerCode, Model = modelName, ModelPublisher = publisher };
-
-            foreach (string filename in Directory.GetFiles(labelFilesFolder, "*.ald"))
-            {
-                if (!IsEmptyLabelFile(filename))
-                {
-                    context.TrackBuildMessage(string.Format("Importing label file {0} into model {1} ({2})", filename, modelName, publisher));
-                    importCommand.Filename = filename;
-                    Client.Client.ExecuteCommand(importCommand, timeoutMinutes);
-
-                    string labelFile = Path.GetFileNameWithoutExtension(filename).Substring(2, 3);
-                    string labelLanguage = Path.GetFileNameWithoutExtension(filename).Substring(5);
-
-                    autoRun.Steps.Add(new Client.AutoRun.Run() { Type = Client.AutoRun.RunType.@class, Name = "Global", Method = "info", Parameters = string.Format("strFmt(\"Flush label {0} language {1}: %1\", Label::flush(\"{0}\",\"{1}\"))", labelFile, labelLanguage) });
-                }
-            }
-
-            string autoRunFile = string.Format(@"{0}\AutoRun-LabelFlush-{1}.xml", Environment.GetEnvironmentVariable("temp"), Guid.NewGuid());
-            Client.AutoRun.AxaptaAutoRun.SerializeAutoRun(autoRun, autoRunFile);
-            context.TrackBuildMessage(string.Format("Flushing imported label files"));
-            Process process = Client.Client.StartCommand(new Client.Commands.AutoRun() { ConfigurationFile = configurationFile, Layer = layer, LayerCode = layerCode, Model = modelName, ModelPublisher = publisher, Filename = autoRunFile });
+            Process process = importer.Start();
 
             Func<int, int, Exception> processWaitDelegate = new Func<int, int, Exception>(CommandContext.WaitForProcess);
-            context.UserState = new CommandContext { Delegate = processWaitDelegate, Process = process, AutoRun = autoRun, AutoRunFile = autoRunFile, LogFile = autoRun.LogFile };
+            context.UserState = new CommandContext { Delegate = processWaitDelegate, Process = process, AutoRun = importer.AutoRun, AutoRunFile = importer.AutoRunFile, LogFile = importer.AutoRun.LogFile };
+
             return processWaitDelegate.BeginInvoke(process.Id, timeoutMinutes, callback, state);
         }
+
+
 
         protected override void Cancel(AsyncCodeActivityContext context)
         {
             CommandContext userState = context.UserState as CommandContext;
 
-            if (userState != null && userState.Process != null)
+            if (userState != null)
             {
-                userState.Process.Kill();
-
-                if (File.Exists(userState.LogFile))
-                    File.Delete(userState.LogFile);
-                File.Delete(userState.AutoRunFile);
+                new ClientImportLabelsTask().Cleanup(userState.Process, userState.LogFile, userState.AutoRunFile);
             }
 
             if (context.IsCancellationRequested)
@@ -392,11 +243,9 @@ namespace CodeCrib.AX.TFS
                 if (processWaitException != null)
                     throw processWaitException;
 
-                AutoRunLogOutput.Output(context, userState.AutoRun, true);
-
-                if (File.Exists(userState.LogFile))
-                    File.Delete(userState.LogFile);
-                File.Delete(userState.AutoRunFile);
+                ClientImportLabelsTask importer = new ClientImportLabelsTask();
+                importer.End(context.DefaultLogger(), userState.AutoRun);
+                importer.Cleanup(null, userState.LogFile, userState.AutoRunFile);
             }
         }
     }
@@ -421,6 +270,7 @@ namespace CodeCrib.AX.TFS
             int timeoutMinutes = TimeOutMinutes.Get(context);
             string vsProjectsFolder = VSProjectsFolder.Get(context);
             StringList layerCodes = LayerCodes.Get(context);
+            string modelManifest = ModelManifestFile.Get(context);
 
             if (!Directory.Exists(vsProjectsFolder))
             {
@@ -436,7 +286,6 @@ namespace CodeCrib.AX.TFS
             string publisher;
             string layer;
             string layerCode;
-            string modelManifest = ModelManifestFile.Get(context);
 
             CodeCrib.AX.Deploy.Configs.ExtractClientLayerModelInfo(configurationFile, layerCodes, modelManifest, out modelName, out publisher, out layer, out layerCode);
 
@@ -496,7 +345,7 @@ namespace CodeCrib.AX.TFS
                 if (processWaitException != null)
                     throw processWaitException;
 
-                AutoRunLogOutput.Output(context, userState.AutoRun, true);
+                AutoRunLogOutput.Output(context.DefaultLogger(), userState.AutoRun, true);
 
                 if (File.Exists(userState.LogFile))
                     File.Delete(userState.LogFile);

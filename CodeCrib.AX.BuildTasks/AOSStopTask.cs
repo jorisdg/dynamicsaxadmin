@@ -8,6 +8,10 @@ namespace CodeCrib.AX.BuildTasks
 {
     public class AOSStopTask : BuildTask
     {
+        public AOSStopTask(IBuildLogger buildLogger, string configurationFile) : base (buildLogger, 0, configurationFile)
+        {
+        }
+
         public AOSStopTask(IBuildLogger buildLogger, int timeoutMinutes, string configurationFile) : base(buildLogger, timeoutMinutes, configurationFile)
         {
         }

@@ -8,6 +8,10 @@ namespace CodeCrib.AX.BuildTasks
 {
     public class AOSStartTask : BuildTask
     {
+        public AOSStartTask(IBuildLogger buildLogger, string configurationFile) : base(buildLogger, 0, configurationFile)
+        {
+        }
+
         public AOSStartTask(IBuildLogger buildLogger, int timeoutMinutes, string configurationFile) : base(buildLogger, timeoutMinutes, configurationFile)
         {
         }

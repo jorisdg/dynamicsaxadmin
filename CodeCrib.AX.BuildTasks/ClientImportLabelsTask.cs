@@ -14,6 +14,15 @@ namespace CodeCrib.AX.BuildTasks
     {
         protected string LabelFilesFolder;
 
+        public ClientImportLabelsTask(
+            IBuildLogger buildLogger,
+            string configurationFile,
+            List<string> layerCodes,
+            string modelManifest,
+            string labelFilesFolder) : base(buildLogger, 0, configurationFile, layerCodes, modelManifest)
+        {
+            LabelFilesFolder = labelFilesFolder;
+        }
 
         public ClientImportLabelsTask(
             IBuildLogger buildLogger, 

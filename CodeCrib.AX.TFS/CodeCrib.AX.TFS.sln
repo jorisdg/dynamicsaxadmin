@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeCrib.AX.BuildTasks", ".
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeCrib.AX.VSTS", "..\CodeCrib.AX.VSTS\CodeCrib.AX.VSTS.csproj", "{3B05D282-0BFE-43BF-971A-D70DFFC22AF9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeCrib.AX.BuildRuntime", "..\CodeCrib.AX.BuildRuntime\CodeCrib.AX.BuildRuntime.csproj", "{48BCED8E-9671-4959-8A5C-D1EB37F8754A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{3B05D282-0BFE-43BF-971A-D70DFFC22AF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B05D282-0BFE-43BF-971A-D70DFFC22AF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B05D282-0BFE-43BF-971A-D70DFFC22AF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48BCED8E-9671-4959-8A5C-D1EB37F8754A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48BCED8E-9671-4959-8A5C-D1EB37F8754A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48BCED8E-9671-4959-8A5C-D1EB37F8754A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48BCED8E-9671-4959-8A5C-D1EB37F8754A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

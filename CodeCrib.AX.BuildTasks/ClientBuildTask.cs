@@ -9,10 +9,11 @@ using System.Threading.Tasks;
 
 namespace CodeCrib.AX.BuildTasks
 {
+    [Serializable]
     abstract public class ClientBuildTask : BuildTask
     {
-        protected List<string> LayerCodes;
-        protected string ModelManifest;
+        public List<string> LayerCodes { get; set; }
+        public string ModelManifest { get; set; }
 
         protected string ModelName;
         protected string Publisher;

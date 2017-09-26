@@ -10,9 +10,10 @@ using System.Threading.Tasks;
 
 namespace CodeCrib.AX.BuildTasks
 {
+    [Serializable]
     public class ClientImportLabelsTask : ClientBuildTask
     {
-        protected string LabelFilesFolder;
+        public string LabelFilesFolder { get; set; }
 
         public ClientImportLabelsTask(
             IBuildLogger buildLogger,

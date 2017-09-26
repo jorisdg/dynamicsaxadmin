@@ -14,6 +14,7 @@ using System.Activities;
 using Microsoft.TeamFoundation.Build.Client;
 using Microsoft.TeamFoundation.Build.Workflow.Activities;
 using System.IO;
+using CodeCrib.AX.BuildTasks;
 
 namespace CodeCrib.AX.TFS
 {
@@ -36,25 +37,10 @@ namespace CodeCrib.AX.TFS
             string manifestFile = ModelManifestFile.Get(context);
             string version = VersionOverride.Get(context);
             string description = DescriptionOverride.Get(context);
-            var serverConfig = CodeCrib.AX.Deploy.Configs.GetServerConfig(configurationFile);
+            bool setNoInstallMode = SetNoInstallMode.Get(context);
 
-            CodeCrib.AX.Manage.ModelStore store = null;
-            if (serverConfig.AOSVersionOrigin.Substring(0, 3).Equals("6.0"))
-            {
-                store = new Manage.ModelStore(serverConfig.DatabaseServer, string.Format("{0}", serverConfig.Database));
-            }
-            else
-            {
-                store = new Manage.ModelStore(serverConfig.DatabaseServer, string.Format("{0}_model", serverConfig.Database));
-            }
-
-            if (!string.IsNullOrEmpty(version) || !string.IsNullOrEmpty(description))
-                store.CreateModel(manifestFile, version, description);
-            else
-                store.CreateModel(manifestFile);
-
-            if (SetNoInstallMode.Get(context))
-                store.SetNoInstallMode();
+            CreateModelTask task = new CreateModelTask(context.DefaultLogger(), configurationFile, manifestFile, version, description, setNoInstallMode);
+            task.Run();
         }
     }
 

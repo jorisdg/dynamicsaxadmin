@@ -38,45 +38,27 @@ namespace CodeCrib.AX.TFS
 
         protected override IAsyncResult BeginExecute(AsyncCodeActivityContext context, AsyncCallback callback, object state)
         {
-            string configurationFile = ConfigurationFile.Get(context);
             int timeoutMinutes = TimeOutMinutes.Get(context);
-            string xpoFile = XPOFile.Get(context);
+            string configurationFile = ConfigurationFile.Get(context);
             StringList layerCodes = LayerCodes.Get(context);
             string modelManifest = ModelManifestFile.Get(context);
-            string modelName;
-            string publisher;
-            string layer;
-            string layerCode;
+            string xpoFile = XPOFile.Get(context);
 
-            CodeCrib.AX.Deploy.Configs.ExtractClientLayerModelInfo(configurationFile, layerCodes, modelManifest, out modelName, out publisher, out layer, out layerCode);
+            ClientImportXpoTask importer = new ClientImportXpoTask(context.DefaultLogger(), configurationFile, layerCodes, modelManifest, xpoFile);
 
-            var clientConfig = CodeCrib.AX.Deploy.Configs.GetClientConfig(configurationFile);
-
-            Client.AutoRun.AxaptaAutoRun autoRun = new Client.AutoRun.AxaptaAutoRun() { ExitWhenDone = true, LogFile = string.Format(@"{0}\ImportLog-{1}.xml", Environment.ExpandEnvironmentVariables(clientConfig.LogDirectory), Guid.NewGuid()) };
-            autoRun.Steps.Add(new Client.AutoRun.XpoImport() { File = xpoFile });
-
-            string autoRunFile = string.Format(@"{0}\AutoRun-ImportXPO-{1}.xml", Environment.GetEnvironmentVariable("temp"), Guid.NewGuid());
-            Client.AutoRun.AxaptaAutoRun.SerializeAutoRun(autoRun, autoRunFile);
-
-            context.TrackBuildMessage(string.Format("Importing XPO {0} into model {1}", xpoFile, modelName));
-            Process process = Client.Client.StartCommand(new Client.Commands.AutoRun() { ConfigurationFile = configurationFile, Layer = layer, LayerCode = layerCode, Model = modelName, ModelPublisher = publisher, Filename = autoRunFile });
-
+            Process process = importer.Start();
             Func<int, int, Exception> processWaitDelegate = new Func<int, int, Exception>(CommandContext.WaitForProcess);
-            context.UserState = new CommandContext { Delegate = processWaitDelegate, Process = process, AutoRun = autoRun, AutoRunFile = autoRunFile, LogFile = autoRun.LogFile };
+
+            context.UserState = new CommandContext { Delegate = processWaitDelegate, Process = process, AutoRun = importer.AutoRun, AutoRunFile = importer.AutoRunFile, LogFile = importer.AutoRun.LogFile };
+
             return processWaitDelegate.BeginInvoke(process.Id, timeoutMinutes, callback, state);
         }
 
         protected override void Cancel(AsyncCodeActivityContext context)
         {
-            CommandContext userState = context.UserState as CommandContext;
-
-            if (userState != null && userState.Process != null)
+            if (context.UserState is CommandContext userState)
             {
-                userState.Process.Kill();
-
-                if (File.Exists(userState.LogFile))
-                    File.Delete(userState.LogFile);
-                File.Delete(userState.AutoRunFile);
+                new ClientImportXpoTask().Cleanup(userState.Process, userState.LogFile, userState.AutoRunFile);
             }
 
             if (context.IsCancellationRequested)
@@ -87,9 +69,7 @@ namespace CodeCrib.AX.TFS
 
         protected override void EndExecute(AsyncCodeActivityContext context, IAsyncResult result)
         {
-            CommandContext userState = context.UserState as CommandContext;
-
-            if (userState != null && userState.AutoRun != null)
+            if (context.UserState is CommandContext userState && userState.AutoRun != null)
             {
                 Func<int, int, Exception> processWaitDelegate = userState.Delegate;
                 Exception processWaitException = processWaitDelegate.EndInvoke(result);
@@ -97,11 +77,9 @@ namespace CodeCrib.AX.TFS
                 if (processWaitException != null)
                     throw processWaitException;
 
-                AutoRunLogOutput.Output(context.DefaultLogger(), userState.AutoRun, true);
-
-                if (File.Exists(userState.LogFile))
-                    File.Delete(userState.LogFile);
-                File.Delete(userState.AutoRunFile);
+                ClientImportXpoTask importer = new ClientImportXpoTask();
+                importer.End(context.DefaultLogger(), userState.AutoRun);
+                importer.Cleanup(null, userState.LogFile, userState.AutoRunFile);
             }
         }
     }

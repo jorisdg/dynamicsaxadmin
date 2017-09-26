@@ -25,8 +25,22 @@ namespace CodeCrib.AX.VSTS
 
         protected override void ProcessRecord()
         {
-            ClientImportLabelsTask task = new ClientImportLabelsTask(VSTSBuildLogger.CreateDefault(), ConfigurationFile, LayerCodes.ToList(), ModelManifest, LabelFilesFolder);
-            task.Run();
+            using (var task = AppDomainWrapper<ClientImportLabelsTask>.Create())
+            {
+                ClientImportLabelsTask remoteTask = task.Facade.Task;
+
+                remoteTask.BuildLogger = VSTSBuildLogger.CreateDefault();
+                remoteTask.LayerCodes = LayerCodes.ToList();
+                remoteTask.ModelManifest = ModelManifest;
+                remoteTask.LabelFilesFolder = LabelFilesFolder;
+
+                task.Facade.Task = remoteTask;
+
+                task.Facade.Run();
+            }
+
+            //ClientImportLabelsTask task = new ClientImportLabelsTask(VSTSBuildLogger.CreateDefault(), ConfigurationFile, LayerCodes.ToList(), ModelManifest, LabelFilesFolder);
+            //task.Run();
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace CodeCrib.AX.VSTS
 {
+    [Serializable]
     public class VSTSBuildLogger : IBuildLogger
     {
         public void LogError(string message)

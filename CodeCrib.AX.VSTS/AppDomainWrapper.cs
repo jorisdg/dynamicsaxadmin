@@ -24,6 +24,11 @@ namespace CodeCrib.AX.VSTS
             facade = (WrappedBuildTask<TTask>)appDomain.CreateInstanceFromAndUnwrap(facadeType.Assembly.Location, facadeType.FullName);
         }
 
+        protected AppDomainWrapper(TTask task) : this()
+        {
+            facade.Task = task;
+        }
+
         public WrappedBuildTask<TTask> Facade
         {
             get
@@ -32,18 +37,9 @@ namespace CodeCrib.AX.VSTS
             }
         }
 
-        public static void Run(IBuildLogger buildLogger, ModelStoreTaskParameters parameters)
+        public static AppDomainWrapper<TTask> Create(TTask task)
         {
-            using (AppDomainWrapper<TTask> wrapper = new AppDomainWrapper<TTask>())
-            {
-                parameters.BuildLogger = VSTSBuildLogger.CreateDefault();
-                wrapper.Facade.RunWithParameters(parameters);
-            }
-        }
-
-        public static AppDomainWrapper<TTask> Create()
-        {
-            return new AppDomainWrapper<TTask>();
+            return new AppDomainWrapper<TTask>(task);
         }
 
         #region IDisposable Support

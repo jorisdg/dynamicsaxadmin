@@ -26,7 +26,7 @@ namespace CodeCrib.AX.VSTS
         protected override void ProcessRecord()
         {
             ClientImportXpoTask task = new ClientImportXpoTask(VSTSBuildLogger.CreateDefault(), ConfigurationFile, LayerCodes.ToList(), ModelManifest, XpoFilePath);
-            task.Run();
+            task.RunInAppDomain();
         }
     }
 }

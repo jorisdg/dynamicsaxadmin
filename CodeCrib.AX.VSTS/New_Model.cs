@@ -28,19 +28,8 @@ namespace CodeCrib.AX.VSTS
 
         protected override void ProcessRecord()
         {
-            ModelStoreTaskParameters parameters = new ModelStoreTaskParameters
-            {
-                ConfigurationFile = ConfigurationFile,
-                ModelManifest = ModelManifest,
-                VersionOverride = VersionOverride,
-                DescriptionOverride = DescriptionOverride,
-                SetNoInstallMode = SetNoInstallMode,
-            };
-
-            //CreateModelTask task = new CreateModelTask(VSTSBuildLogger.CreateDefault(), ConfigurationFile, ModelManifest, VersionOverride, DescriptionOverride, SetNoInstallMode);
-            //task.Run();
-
-            AppDomainWrapper<CreateModelTask>.Run(VSTSBuildLogger.CreateDefault(), parameters);
+            CreateModelTask task = new CreateModelTask(VSTSBuildLogger.CreateDefault(), ConfigurationFile, ModelManifest, VersionOverride, DescriptionOverride, SetNoInstallMode);
+            task.RunInAppDomain();
         }
     }
 }

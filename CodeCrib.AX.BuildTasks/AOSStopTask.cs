@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace CodeCrib.AX.BuildTasks
 {
+    [Serializable]
     public class AOSStopTask : BuildTask
     {
         public AOSStopTask(IBuildLogger buildLogger, string configurationFile) : base (buildLogger, 0, configurationFile)

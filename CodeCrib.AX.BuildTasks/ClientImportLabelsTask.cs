@@ -13,7 +13,7 @@ namespace CodeCrib.AX.BuildTasks
     [Serializable]
     public class ClientImportLabelsTask : ClientBuildTask
     {
-        public string LabelFilesFolder { get; set; }
+        protected string LabelFilesFolder;
 
         public ClientImportLabelsTask(
             IBuildLogger buildLogger,
@@ -92,7 +92,9 @@ namespace CodeCrib.AX.BuildTasks
 
             AutoRunFile = string.Format(@"{0}\AutoRun-LabelFlush-{1}.xml", Environment.GetEnvironmentVariable("temp"), Guid.NewGuid());
             AxaptaAutoRun.SerializeAutoRun(AutoRun, AutoRunFile);
+
             BuildLogger.LogInformation(string.Format("Flushing imported label files"));
+            BuildLogger.StoreLogFile(AutoRunFile);
 
             Process process = Client.Client.StartCommand(new Client.Commands.AutoRun() { ConfigurationFile = ConfigurationFile, Layer = Layer, LayerCode = LayerCode, Model = ModelName, ModelPublisher = Publisher, Filename = AutoRunFile });
 

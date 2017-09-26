@@ -9,6 +9,7 @@ using System.IO;
 
 namespace CodeCrib.AX.BuildTasks
 {
+    [Serializable]
     public class ClientImportXpoTask : ClientBuildTask
     {
         protected string XpoFilePath;
@@ -64,14 +65,15 @@ namespace CodeCrib.AX.BuildTasks
             Config.Client clientConfig = Deploy.Configs.GetClientConfig(ConfigurationFile);
 
             AutoRun = new AxaptaAutoRun() { ExitWhenDone = true, LogFile = string.Format(@"{0}\ImportLog-{1}.xml", Environment.ExpandEnvironmentVariables(clientConfig.LogDirectory), Guid.NewGuid()) };
-            //Client.Commands.ImportXPO importCommand = new Client.Commands.ImportXPO() { ConfigurationFile = ConfigurationFile, Layer = Layer, LayerCode = LayerCode, Model = ModelName, ModelPublisher = Publisher };
+            AutoRun.Steps.Add(new Client.AutoRun.XpoImport() { File = XpoFilePath });
 
             AutoRunFile = Path.Combine(Environment.GetEnvironmentVariable("temp"), string.Format("AutoRun-ImportXPO-{0}", Guid.NewGuid()));
             AxaptaAutoRun.SerializeAutoRun(AutoRun, AutoRunFile);
 
             BuildLogger.LogInformation(string.Format("Importing XPO {0} into model {1}", XpoFilePath, ModelName));
+            BuildLogger.StoreLogFile(AutoRunFile);
 
-            Process process = Client.Client.StartCommand(new Client.Commands.AutoRun() { ConfigurationFile = ConfigurationFile, Layer = Layer, Model = ModelName, ModelPublisher = Publisher, Filename = AutoRunFile });
+            Process process = Client.Client.StartCommand(new Client.Commands.AutoRun() { ConfigurationFile = ConfigurationFile, Layer = Layer, LayerCode = LayerCode, Model = ModelName, ModelPublisher = Publisher, Filename = AutoRunFile });
 
             return process;
         }

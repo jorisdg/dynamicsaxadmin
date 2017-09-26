@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace CodeCrib.AX.BuildTasks
 {
     [Serializable]
+    [Obsolete("Tasks marshal by value through [Serializable] attribute", true)]
     public class ModelStoreTaskParameters
     {
         public IBuildLogger BuildLogger { get; set; }

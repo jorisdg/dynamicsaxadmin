@@ -55,7 +55,6 @@
     <Compile Include="DatabaseTask.cs" />
     <Compile Include="IBuildLogger.cs" />
     <Compile Include="ClientImportLabelsTask.cs" />
-    <Compile Include="InMemoryLogger.cs" />
     <Compile Include="ITaskFromParametersInitializable.cs" />
     <Compile Include="ModelStoreTaskParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

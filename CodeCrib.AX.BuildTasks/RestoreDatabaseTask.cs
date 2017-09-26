@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace CodeCrib.AX.BuildTasks
 {
+    [Serializable]
     public class RestoreDatabaseTask : DatabaseTask
     {
         protected string BackupFilePath;

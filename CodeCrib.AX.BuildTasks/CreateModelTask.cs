@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace CodeCrib.AX.BuildTasks
 {
-    public class CreateModelTask : BuildTask, ITaskFromParametersInitializable
+    [Serializable]
+    public class CreateModelTask : BuildTask
     {
         protected string ModelManifest;
         protected string VersionOverride;
@@ -45,16 +46,6 @@ namespace CodeCrib.AX.BuildTasks
 
         public CreateModelTask()
         {
-        }
-
-        public void InitializeFromParameters(ModelStoreTaskParameters parameters)
-        {
-            BuildLogger = parameters.BuildLogger;
-            ConfigurationFile = parameters.ConfigurationFile;
-            ModelManifest = parameters.ModelManifest;
-            VersionOverride = parameters.VersionOverride;
-            DescriptionOverride = parameters.DescriptionOverride;
-            SetNoInstallMode = parameters.SetNoInstallMode;
         }
 
         public override void Run()

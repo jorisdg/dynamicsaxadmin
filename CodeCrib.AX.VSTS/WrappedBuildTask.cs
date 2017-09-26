@@ -28,13 +28,9 @@ namespace CodeCrib.AX.VSTS
             task = new TTask();
         }
 
-        public void RunWithParameters(ModelStoreTaskParameters parameters)
+        public void SetTask(Func<TTask> factory)
         {
-            if (task is ITaskFromParametersInitializable iTask)
-            {
-                iTask.InitializeFromParameters(parameters);
-            }
-            task.Run();
+            task = factory();
         }
 
         public void Run()

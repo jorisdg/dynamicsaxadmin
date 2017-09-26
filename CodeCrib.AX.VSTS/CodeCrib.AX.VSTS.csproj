@@ -54,6 +54,7 @@
     <Compile Include="Restore_Database.cs" />
     <Compile Include="Start_AOS.cs" />
     <Compile Include="Stop_AOS.cs" />
+    <Compile Include="TaskAppDomainExtensions.cs" />
     <Compile Include="VSTSBuildLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WrappedBuildTask.cs" />

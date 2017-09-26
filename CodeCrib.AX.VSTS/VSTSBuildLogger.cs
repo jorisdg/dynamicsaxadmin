@@ -32,5 +32,10 @@ namespace CodeCrib.AX.VSTS
         {
             return new VSTSBuildLogger();
         }
+
+        public void StoreLogFile(string logFilePath)
+        {
+            Console.WriteLine("##vso[task.uploadfile]{0}", logFilePath);
+        }
     }
 }

@@ -37,5 +37,9 @@ namespace CodeCrib.AX.TFS
         {
             context.TrackBuildWarning(message);
         }
+
+        public void StoreLogFile(string logFilePath)
+        {
+        }
     }
 }

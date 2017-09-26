@@ -39,6 +39,8 @@ namespace CodeCrib.AX.BuildTasks
 
         public static void Output(IBuildLogger buildLogger, Client.AutoRun.AxaptaAutoRun autoRun, bool outputAllAsInfo = false, bool skipInfoLog = false)
         {
+            buildLogger.LogInformation("Parsing AutoRun log file");
+
             autoRun.ParseLog();
 
             //OutputLog(context, autoRun.Log, outputAllAsInfo);

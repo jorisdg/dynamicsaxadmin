@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace CodeCrib.AX.BuildTasks
 {
+    [Serializable]
     abstract public class DatabaseTask : BuildTask
     {
         protected string ServerName;

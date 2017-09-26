@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace CodeCrib.AX.BuildTasks
 {
+    [Serializable]
     public class CombineXPOsTask : BuildTask
     {
         protected string Folder;

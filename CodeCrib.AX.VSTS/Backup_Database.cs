@@ -32,7 +32,7 @@ namespace CodeCrib.AX.VSTS
         protected override void ProcessRecord()
         {
             BackupDatabaseTask task = new BackupDatabaseTask(VSTSBuildLogger.CreateDefault(), ServerName, DatabaseName, ConfigurationFile, BackupFilePath, OverwriteBackupSets, ForceCompressionOn);
-            task.Run();
+            task.RunInAppDomain();
         }
     }
 }

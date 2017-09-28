@@ -62,9 +62,9 @@
     <Compile Include="DatabaseTask.cs" />
     <Compile Include="DeployReferencesTask.cs" />
     <Compile Include="ClientGenerateCILTask.cs" />
+    <Compile Include="ExportModelTask.cs" />
     <Compile Include="IBuildLogger.cs" />
     <Compile Include="ClientImportLabelsTask.cs" />
-    <Compile Include="ITaskFromParametersInitializable.cs" />
     <Compile Include="ModelStoreTaskParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RestoreDatabaseTask.cs" />

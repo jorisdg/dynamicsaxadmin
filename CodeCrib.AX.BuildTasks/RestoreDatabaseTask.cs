@@ -21,6 +21,10 @@ namespace CodeCrib.AX.BuildTasks
             BackupFilePath = backupFilePath;
         }
 
+        public RestoreDatabaseTask()
+        {
+        }
+
         public override void Run()
         {
             if (string.IsNullOrEmpty(ServerName))

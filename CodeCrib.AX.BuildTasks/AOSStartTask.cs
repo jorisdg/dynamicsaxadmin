@@ -17,6 +17,10 @@ namespace CodeCrib.AX.BuildTasks
         {
         }
 
+        public AOSStartTask()
+        {
+        }
+
         public override void Run()
         {
             var aosNumber = Deploy.Configs.GetServerNumber(ConfigurationFile);

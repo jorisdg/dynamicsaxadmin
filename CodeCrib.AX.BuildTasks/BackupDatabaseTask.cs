@@ -27,6 +27,10 @@ namespace CodeCrib.AX.BuildTasks
             ForceCompressionOn = forceCompressionOn;
         }
 
+        public BackupDatabaseTask()
+        {
+        }
+
         public override void Run()
         {
             if (string.IsNullOrEmpty(ServerName))

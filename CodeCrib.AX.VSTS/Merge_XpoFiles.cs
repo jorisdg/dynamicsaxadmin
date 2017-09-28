@@ -29,7 +29,7 @@ namespace CodeCrib.AX.VSTS
         protected override void ProcessRecord()
         {
             CombineXPOsTask task = new CombineXPOsTask(VSTSBuildLogger.CreateDefault(), Folder, Recursive, OutputFilePath, IncludeSystemObjects, IncludeNonSystemObjects);
-            task.Run();
+            task.RunInAppDomain();
         }
     }
 }

@@ -16,6 +16,10 @@ namespace CodeCrib.AX.BuildTasks
             LeaveXppIL = leaveXppIL;
         }
 
+        public CleanTask()
+        {
+        }
+
         public override void Run()
         {
             BuildLogger.LogInformation("Cleaning server artifacts");

@@ -23,16 +23,6 @@ namespace CodeCrib.AX.VSTS
             }
         }
 
-        public WrappedBuildTask()
-        {
-            task = new TTask();
-        }
-
-        public void SetTask(Func<TTask> factory)
-        {
-            task = factory();
-        }
-
         public void Run()
         {
             task.Run();

@@ -8,18 +8,15 @@ using System.Threading.Tasks;
 
 namespace CodeCrib.AX.VSTS
 {
-    [Cmdlet(VerbsData.Initialize, "EnvironmentFiles")]
-    public class Initialize_EnvironmentFiles : PSCmdlet
+    [Cmdlet(VerbsLifecycle.Invoke, "CILGeneration")]
+    public class Invoke_CILGeneration : PSCmdlet
     {
-        [Parameter(HelpMessage = "Preserve XPPIL files", Mandatory = false)]
-        public SwitchParameter LeaveXppIL = false;
-
         [Parameter(HelpMessage = "Path to the configuration file", Mandatory = false)]
-        public string ConfigurationFile = null;
+        public string ConfigurationFile;
 
         protected override void ProcessRecord()
         {
-            CleanTask task = new CleanTask(VSTSBuildLogger.CreateDefault(), LeaveXppIL, ConfigurationFile);
+            ClientGenerateCILTask task = new ClientGenerateCILTask(VSTSBuildLogger.CreateDefault(), ConfigurationFile);
             task.RunInAppDomain();
         }
     }

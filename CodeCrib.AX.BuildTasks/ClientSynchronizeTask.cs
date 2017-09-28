@@ -29,7 +29,7 @@ namespace CodeCrib.AX.BuildTasks
         {
             Config.Client clientConfig = Deploy.Configs.GetClientConfig(ConfigurationFile);
 
-            LogFile = Path.Combine(Environment.ExpandEnvironmentVariables(clientConfig.LogDirectory), string.Format("SynchronizeLog-{1}.xml", Guid.NewGuid()));
+            LogFile = Path.Combine(Environment.ExpandEnvironmentVariables(clientConfig.LogDirectory), string.Format("SynchronizeLog-{0}.xml", Guid.NewGuid()));
 
             AutoRun = new Client.AutoRun.AxaptaAutoRun
             {
@@ -38,7 +38,7 @@ namespace CodeCrib.AX.BuildTasks
             };
             AutoRun.Steps.Add(new Client.AutoRun.Synchronize { SyncDB = true, SyncRoles = true });
 
-            AutoRunFile = Path.Combine(Environment.GetEnvironmentVariable("temp"), string.Format("AutoRun-Synchronize-{1}.xml", Guid.NewGuid()));
+            AutoRunFile = Path.Combine(Environment.GetEnvironmentVariable("temp"), string.Format("AutoRun-Synchronize-{0}.xml", Guid.NewGuid()));
             Client.AutoRun.AxaptaAutoRun.SerializeAutoRun(AutoRun, AutoRunFile);
 
             Process process = Client.Client.StartCommand(new Client.Commands.AutoRun { ConfigurationFile = ConfigurationFile, Filename = AutoRunFile });

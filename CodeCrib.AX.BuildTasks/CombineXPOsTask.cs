@@ -31,6 +31,10 @@ namespace CodeCrib.AX.BuildTasks
             IncludeNonSystemObjects = includeNonSystemObjects;
         }
 
+        public CombineXPOsTask()
+        {
+        }
+
         public override void Run()
         {
             if (!Directory.Exists(System.IO.Path.GetDirectoryName(CombinedXPOFile)))

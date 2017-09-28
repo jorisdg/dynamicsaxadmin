@@ -26,7 +26,7 @@ namespace CodeCrib.AX.VSTS
         protected override void ProcessRecord()
         {
             RestoreDatabaseTask task = new RestoreDatabaseTask(VSTSBuildLogger.CreateDefault(), ServerName, DatabaseName, ConfigurationFile, BackupFilePath);
-            task.Run();
+            task.RunInAppDomain();
         }
     }
 }

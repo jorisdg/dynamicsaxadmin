@@ -17,5 +17,9 @@ namespace CodeCrib.AX.BuildTasks
             ServerName = serverName;
             DatabaseName = databaseName;
         }
+
+        public DatabaseTask()
+        {
+        }
     }
 }

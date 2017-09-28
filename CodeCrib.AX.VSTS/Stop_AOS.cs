@@ -17,7 +17,7 @@ namespace CodeCrib.AX.VSTS
         protected override void ProcessRecord()
         {
             AOSStopTask task = new AOSStopTask(VSTSBuildLogger.CreateDefault(), ConfigurationFile);
-            task.Run();            
+            task.RunInAppDomain();            
         }
     }
 }

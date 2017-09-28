@@ -49,16 +49,17 @@ namespace CodeCrib.AX.TFS
             Process process = importer.Start();
             Func<int, int, Exception> processWaitDelegate = new Func<int, int, Exception>(CommandContext.WaitForProcess);
 
-            context.UserState = new CommandContext { Delegate = processWaitDelegate, Process = process, AutoRun = importer.AutoRun, AutoRunFile = importer.AutoRunFile, LogFile = importer.AutoRun.LogFile };
+            context.UserState = new CommandContext { Delegate = processWaitDelegate, Process = process, CancelableBuildTask = importer };
 
             return processWaitDelegate.BeginInvoke(process.Id, timeoutMinutes, callback, state);
         }
 
         protected override void Cancel(AsyncCodeActivityContext context)
         {
-            if (context.UserState is CommandContext userState)
+            if (context.UserState is CommandContext userState &&
+                userState.CancelableBuildTask != null)
             {
-                new ClientImportXpoTask().Cleanup(userState.Process, userState.LogFile, userState.AutoRunFile);
+                userState.CancelableBuildTask.Cleanup(userState.Process);
             }
 
             if (context.IsCancellationRequested)
@@ -69,7 +70,7 @@ namespace CodeCrib.AX.TFS
 
         protected override void EndExecute(AsyncCodeActivityContext context, IAsyncResult result)
         {
-            if (context.UserState is CommandContext userState && userState.AutoRun != null)
+            if (context.UserState is CommandContext userState)
             {
                 Func<int, int, Exception> processWaitDelegate = userState.Delegate;
                 Exception processWaitException = processWaitDelegate.EndInvoke(result);
@@ -77,9 +78,11 @@ namespace CodeCrib.AX.TFS
                 if (processWaitException != null)
                     throw processWaitException;
 
-                ClientImportXpoTask importer = new ClientImportXpoTask();
-                importer.End(context.DefaultLogger(), userState.AutoRun);
-                importer.Cleanup(null, userState.LogFile, userState.AutoRunFile);
+                if (userState.CancelableBuildTask != null)
+                {
+                    userState.CancelableBuildTask.End();
+                    userState.CancelableBuildTask.Cleanup(userState.Process);
+                }
             }
         }
     }
@@ -96,32 +99,20 @@ namespace CodeCrib.AX.TFS
             int timeoutMinutes = TimeOutMinutes.Get(context);
             string configurationFile = ConfigurationFile.Get(context);
 
-            var clientConfig = CodeCrib.AX.Deploy.Configs.GetClientConfig(configurationFile);
-
-            Client.AutoRun.AxaptaAutoRun autoRun = new Client.AutoRun.AxaptaAutoRun() { ExitWhenDone = true, LogFile = string.Format(@"{0}\SynchronizeLog-{1}.xml", Environment.ExpandEnvironmentVariables(clientConfig.LogDirectory), Guid.NewGuid()) };
-            autoRun.Steps.Add(new Client.AutoRun.Synchronize() { SyncDB = true, SyncRoles = true });
-
-            string autoRunFile = string.Format(@"{0}\AutoRun-Synchronize-{1}.xml", Environment.GetEnvironmentVariable("temp"), Guid.NewGuid());
-            Client.AutoRun.AxaptaAutoRun.SerializeAutoRun(autoRun, autoRunFile);
-
-            Process process = Client.Client.StartCommand(new Client.Commands.AutoRun() { ConfigurationFile = configurationFile, Filename = autoRunFile });
+            ClientSynchronizeTask task = new ClientSynchronizeTask(context.DefaultLogger(), timeoutMinutes, configurationFile);
+            Process process = task.Start();
 
             Func<int, int, Exception> processWaitDelegate = new Func<int, int, Exception>(CommandContext.WaitForProcess);
-            context.UserState = new CommandContext { Delegate = processWaitDelegate, Process = process, AutoRun = autoRun, AutoRunFile = autoRunFile, LogFile = autoRun.LogFile };
+            context.UserState = new CommandContext { Delegate = processWaitDelegate, Process = process, CancelableBuildTask = task };
             return processWaitDelegate.BeginInvoke(process.Id, timeoutMinutes, callback, state);
         }
 
         protected override void Cancel(AsyncCodeActivityContext context)
         {
-            CommandContext userState = context.UserState as CommandContext;
-
-            if (userState != null && userState.Process != null)
+            if (context.UserState is CommandContext userState && 
+                userState.CancelableBuildTask != null)
             {
-                userState.Process.Kill();
-
-                if (File.Exists(userState.LogFile))
-                    File.Delete(userState.LogFile);
-                File.Delete(userState.AutoRunFile);
+                userState.CancelableBuildTask.Cleanup(userState.Process);
             }
 
             if (context.IsCancellationRequested)
@@ -134,7 +125,7 @@ namespace CodeCrib.AX.TFS
         {
             CommandContext userState = context.UserState as CommandContext;
 
-            if (userState != null && userState.AutoRun != null)
+            if (userState != null)
             {
                 Func<int, int, Exception> processWaitDelegate = userState.Delegate;
                 Exception processWaitException = processWaitDelegate.EndInvoke(result);
@@ -142,11 +133,11 @@ namespace CodeCrib.AX.TFS
                 if (processWaitException != null)
                     throw processWaitException;
 
-                AutoRunLogOutput.Output(context.DefaultLogger(), userState.AutoRun);
-
-                if (File.Exists(userState.LogFile))
-                    File.Delete(userState.LogFile);
-                File.Delete(userState.AutoRunFile);
+                if (userState.CancelableBuildTask != null)
+                {
+                    userState.CancelableBuildTask.End();
+                    userState.CancelableBuildTask.Cleanup(userState.Process);
+                }
             }
         }
     }
@@ -179,14 +170,15 @@ namespace CodeCrib.AX.TFS
             {
                 // TODO Is there a better way with this? can we just return null or something?
                 Func<int, int, Exception> bogusDelegate = new Func<int, int, Exception>(CommandContext.WaitForProcess);
-                context.UserState = new CommandContext { Delegate = bogusDelegate, Process = null, AutoRun = null, AutoRunFile = null };
+                context.UserState = new CommandContext { Delegate = bogusDelegate, Process = null, CancelableBuildTask = null };
                 return bogusDelegate.BeginInvoke(0, 0, callback, state);
             }
 
             Process process = importer.Start();
 
             Func<int, int, Exception> processWaitDelegate = new Func<int, int, Exception>(CommandContext.WaitForProcess);
-            context.UserState = new CommandContext { Delegate = processWaitDelegate, Process = process, AutoRun = importer.AutoRun, AutoRunFile = importer.AutoRunFile, LogFile = importer.AutoRun.LogFile };
+            //context.UserState = new CommandContext { Delegate = processWaitDelegate, Process = process, AutoRun = importer.AutoRun, AutoRunFile = importer.AutoRunFile, LogFile = importer.AutoRun.LogFile };
+            context.UserState = new CommandContext { Delegate = processWaitDelegate, Process = process, CancelableBuildTask = importer };
 
             return processWaitDelegate.BeginInvoke(process.Id, timeoutMinutes, callback, state);
         }
@@ -197,9 +189,9 @@ namespace CodeCrib.AX.TFS
         {
             CommandContext userState = context.UserState as CommandContext;
 
-            if (userState != null)
+            if (userState != null && userState.CancelableBuildTask != null)
             {
-                new ClientImportLabelsTask().Cleanup(userState.Process, userState.LogFile, userState.AutoRunFile);
+                userState.CancelableBuildTask.Cleanup(userState.Process);
             }
 
             if (context.IsCancellationRequested)
@@ -211,9 +203,7 @@ namespace CodeCrib.AX.TFS
 
         protected override void EndExecute(AsyncCodeActivityContext context, IAsyncResult result)
         {
-            CommandContext userState = context.UserState as CommandContext;
-
-            if (userState != null && userState.AutoRun != null)
+            if (context.UserState is CommandContext userState)
             {
                 Func<int, int, Exception> processWaitDelegate = userState.Delegate;
                 Exception processWaitException = processWaitDelegate.EndInvoke(result);
@@ -221,9 +211,11 @@ namespace CodeCrib.AX.TFS
                 if (processWaitException != null)
                     throw processWaitException;
 
-                ClientImportLabelsTask importer = new ClientImportLabelsTask();
-                importer.End(context.DefaultLogger(), userState.AutoRun);
-                importer.Cleanup(null, userState.LogFile, userState.AutoRunFile);
+                if (userState.CancelableBuildTask != null)
+                {
+                    userState.CancelableBuildTask.End();
+                    userState.CancelableBuildTask.Cleanup(userState.Process);
+                }
             }
         }
     }
@@ -250,72 +242,43 @@ namespace CodeCrib.AX.TFS
             StringList layerCodes = LayerCodes.Get(context);
             string modelManifest = ModelManifestFile.Get(context);
 
-            if (!Directory.Exists(vsProjectsFolder))
-            {
-                context.TrackBuildMessage(string.Format("VS Projects folder {0} not found.", vsProjectsFolder));
+            ClientImportVSProjectTask task = new ClientImportVSProjectTask(context.DefaultLogger(), configurationFile, layerCodes, modelManifest, vsProjectsFolder);
 
+            if (!task.CheckVSProjectsDirectoryExists())
+            {
                 // TODO Is there a better way with this? can we just return null or something?
                 Func<int, int, Exception> bogusDelegate = new Func<int, int, Exception>(CommandContext.WaitForProcess);
-                context.UserState = new CommandContext { Delegate = bogusDelegate, Process = null, AutoRun = null, AutoRunFile = null };
+                context.UserState = new CommandContext { Delegate = bogusDelegate, Process = null, CancelableBuildTask = null };
                 return bogusDelegate.BeginInvoke(0, 0, callback, state);
             }
 
-            string modelName;
-            string publisher;
-            string layer;
-            string layerCode;
-
-            CodeCrib.AX.Deploy.Configs.ExtractClientLayerModelInfo(configurationFile, layerCodes, modelManifest, out modelName, out publisher, out layer, out layerCode);
-
-            var clientConfig = CodeCrib.AX.Deploy.Configs.GetClientConfig(configurationFile);
-
-
-            Client.AutoRun.AxaptaAutoRun autoRun = new Client.AutoRun.AxaptaAutoRun() { ExitWhenDone = true, LogFile = string.Format(@"{0}\VSImportLog-{1}.xml", Environment.ExpandEnvironmentVariables(clientConfig.LogDirectory), Guid.NewGuid()) };
-
-            var filesToProcess = from filter in new[] { "*.csproj", "*.dynamicsproj", "*.vbproj" }
-                                 select Directory.GetFiles(vsProjectsFolder, filter, SearchOption.AllDirectories);
-
-            foreach (string filename in filesToProcess.SelectMany(f => f))
-            {
-                autoRun.Steps.Add(new Client.AutoRun.Run() { Type = Client.AutoRun.RunType.@class, Name = "SysTreeNodeVSProject", Method = "importProject", Parameters = string.Format("@'{0}'", filename) });
-            }
-
-            string autoRunFile = string.Format(@"{0}\AutoRun-VSImport-{1}.xml", Environment.GetEnvironmentVariable("temp"), Guid.NewGuid());
-            Client.AutoRun.AxaptaAutoRun.SerializeAutoRun(autoRun, autoRunFile);
-
-            context.TrackBuildMessage(string.Format("Importing VS Projects from folder {0} into model {1}", vsProjectsFolder, modelName));
-            Process process = Client.Client.StartCommand(new Client.Commands.AutoRun() { ConfigurationFile = configurationFile, Layer = layer, LayerCode = layerCode, Model = modelName, ModelPublisher = publisher, Filename = autoRunFile });
+            Process process = task.Start();
 
             Func<int, int, Exception> processWaitDelegate = new Func<int, int, Exception>(CommandContext.WaitForProcess);
-            context.UserState = new CommandContext { Delegate = processWaitDelegate, Process = process, AutoRun = autoRun, AutoRunFile = autoRunFile, LogFile = autoRun.LogFile };
+            context.UserState = new CommandContext { Delegate = processWaitDelegate, Process = process, CancelableBuildTask = task };
             return processWaitDelegate.BeginInvoke(process.Id, timeoutMinutes, callback, state);
         }
 
         protected override void Cancel(AsyncCodeActivityContext context)
         {
-            CommandContext userState = context.UserState as CommandContext;
 
-            if (userState != null && userState.Process != null)
+            if (context.UserState is CommandContext userState && 
+                userState.CancelableBuildTask != null)
             {
-                userState.Process.Kill();
-
-                if (File.Exists(userState.LogFile))
-                    File.Delete(userState.LogFile);
-                File.Delete(userState.AutoRunFile);
+                userState.CancelableBuildTask.Cleanup(userState.Process);
             }
 
             if (context.IsCancellationRequested)
             {
                 context.MarkCanceled();
             }
-
         }
 
         protected override void EndExecute(AsyncCodeActivityContext context, IAsyncResult result)
         {
             CommandContext userState = context.UserState as CommandContext;
 
-            if (userState != null && userState.AutoRun != null)
+            if (userState != null && userState.CancelableBuildTask != null)
             {
                 Func<int, int, Exception> processWaitDelegate = userState.Delegate;
                 Exception processWaitException = processWaitDelegate.EndInvoke(result);
@@ -323,11 +286,8 @@ namespace CodeCrib.AX.TFS
                 if (processWaitException != null)
                     throw processWaitException;
 
-                AutoRunLogOutput.Output(context.DefaultLogger(), userState.AutoRun, true);
-
-                if (File.Exists(userState.LogFile))
-                    File.Delete(userState.LogFile);
-                File.Delete(userState.AutoRunFile);
+                userState.CancelableBuildTask.End();
+                userState.CancelableBuildTask.Cleanup(userState.Process);
             }
         }
     }

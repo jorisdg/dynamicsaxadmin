@@ -41,6 +41,13 @@ namespace CodeCrib.AX.AXBuild
             return axBuild.Start(command.Parameters());
         }
 
+        public static Process CreateCommand(string serverBinPath, Commands.Command command)
+        {
+            AXBuild axBuild = NewServerBinPath(serverBinPath);
+
+            return axBuild.Create(command.Parameters());
+        }
+
         public void Execute(Commands.Command command, int timeOutMinutes)
         {
             Execute(command.Parameters(), timeOutMinutes);
@@ -93,11 +100,22 @@ namespace CodeCrib.AX.AXBuild
 
         public Process Start(List<string> parameterList)
         {
+            Process process = Create(parameterList);
+            process.Start();
+
+            return process;
+        }
+
+        public Process Create(List<string> parameterList)
+        {
+            Process process = new Process();
+
             string parameterString = string.Join(" ", parameterList.ToArray());
 
-            ProcessStartInfo processStartInfo = new ProcessStartInfo(ExecutablePath, parameterString);
+            process.StartInfo.FileName = ExecutablePath;
+            process.StartInfo.Arguments = parameterString;
 
-            return Process.Start(processStartInfo);
+            return process;
         }
     }
 }

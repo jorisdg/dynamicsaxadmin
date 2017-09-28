@@ -12,9 +12,7 @@ namespace CodeCrib.AX.BuildTasks
     {
         public Func<int, int, Exception> Delegate { get; set; }
         public Process Process { get; set; }
-        public Client.AutoRun.AxaptaAutoRun AutoRun { get; set; }
-        public string AutoRunFile { get; set; }
-        public string LogFile { get; set; }
+        public CancelableBuildTask CancelableBuildTask { get; set; }
 
         public static Exception WaitForProcess(int processId, int timeOutMinutes)
         {

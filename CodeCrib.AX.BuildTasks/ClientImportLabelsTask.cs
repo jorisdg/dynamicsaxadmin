@@ -69,6 +69,11 @@ namespace CodeCrib.AX.BuildTasks
 
         public override Process Start()
         {
+            if (!CheckLabelDirectoryExists())
+            {
+                return null;
+            }
+
             Deploy.Configs.ExtractClientLayerModelInfo(ConfigurationFile, LayerCodes, ModelManifest, out ModelName, out Publisher, out Layer, out LayerCode);
 
             var clientConfig = Deploy.Configs.GetClientConfig(ConfigurationFile);
@@ -101,23 +106,9 @@ namespace CodeCrib.AX.BuildTasks
             return process;
         }
 
-        public override void End(IBuildLogger buildLogger, AxaptaAutoRun autoRun)
+        public override void End()
         {
-            AutoRunLogOutput.Output(buildLogger, autoRun, true);
-        }
-
-        public override void Run()
-        {
-            Process process = Start();
-
-            Exception executionException = CommandContext.WaitForProcess(process.Id, TimeoutMinutes);
-            if (executionException != null)
-            {
-                throw executionException;
-            }
-
-            End(BuildLogger, AutoRun);
-            Cleanup(null, AutoRun.LogFile, AutoRunFile);
+            AutoRunLogOutput.Output(BuildLogger, AutoRun, true);
         }
 
         public bool CheckLabelDirectoryExists()

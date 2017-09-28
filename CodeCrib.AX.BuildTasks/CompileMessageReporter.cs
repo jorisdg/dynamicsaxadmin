@@ -1,20 +1,14 @@
-﻿using Microsoft.TeamFoundation.Build.Client;
-using Microsoft.TeamFoundation.Build.Workflow.Activities;
-using System;
-using System.Activities;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CodeCrib.AX.TFS
+namespace CodeCrib.AX.BuildTasks
 {
-    [Obsolete("Use CodeCrib.AX.BuildTasks.CompileMessageReporter", false)]
-    class Helper
+    public class CompileMessageReporter
     {
-        public static void ReportCompileMessages(CodeActivityContext context, CodeCrib.AX.Client.CompileOutput output)
+        public static void ReportCompileMessages(IBuildLogger buildLogger, Client.CompileOutput output)
         {
             bool hasErrors = false;
             foreach (var item in output.Output)
@@ -24,27 +18,27 @@ namespace CodeCrib.AX.TFS
                 {
                     // Compile Errors
                     case 0:
-                        context.TrackBuildError(compileMessage);
+                        buildLogger.LogError(compileMessage);
                         hasErrors = true;
                         break;
                     // Compile Warnings
                     case 1:
                     case 2:
                     case 3:
-                        context.TrackBuildWarning(compileMessage);
+                        buildLogger.LogWarning(compileMessage);
                         break;
                     // Best practices
                     case 4:
-                        context.TrackBuildMessage(string.Format("BP: {0}", compileMessage), BuildMessageImportance.Low);
+                        buildLogger.LogInformation(string.Format("BP: {0}", compileMessage));
                         break;
                     // TODOs
                     case 254:
                     case 255:
-                        context.TrackBuildWarning(string.Format("TODO: {0}", compileMessage));
+                        buildLogger.LogWarning(string.Format("TODO: {0}", compileMessage));
                         break;
                     // "Other"
                     default:
-                        context.TrackBuildMessage(compileMessage);
+                        buildLogger.LogInformation(compileMessage);
                         break;
                 }
             }
@@ -53,6 +47,5 @@ namespace CodeCrib.AX.TFS
                 throw new Exception("Compile error(s) found");
             }
         }
-
     }
 }

@@ -30,43 +30,20 @@ namespace CodeCrib.AX.TFS
             string clientExePath = ClientExecutablePath.Get(context);
             string configurationFile = ConfigurationFile.Get(context);
 
-            context.TrackBuildMessage("Generating CIL.");
-
-            Client.Commands.GenerateCIL compile = new Client.Commands.GenerateCIL()
-            {
-                Minimize = true,
-                LazyClassLoading = true,
-                LazyTableLoading = true
-            };
-
-            if (!string.IsNullOrEmpty(configurationFile))
-            {
-                compile.ConfigurationFile = configurationFile;
-            }
-
-            Process process = null;
-            if (string.IsNullOrEmpty(clientExePath))
-                process = Client.Client.StartCommand(compile);
-            else
-                process = Client.Client.StartCommand(clientExePath, compile);
-
-            var alternateBinDirectory = CodeCrib.AX.Deploy.Configs.GetServerConfig(configurationFile).AlternateBinDirectory;
+            ClientGenerateCILTask task = new ClientGenerateCILTask(context.DefaultLogger(), timeOutMinutes, configurationFile, clientExePath);
+            Process process = task.Start();
 
             Func<int, int, Exception> processWaitDelegate = new Func<int, int, Exception>(CommandContext.WaitForProcess);
-            context.UserState = new CommandContext { Delegate = processWaitDelegate, Process = process, AutoRun = null, AutoRunFile = null, LogFile = string.Format(@"{0}\XppIL\Dynamics.Ax.Application.dll.log", Environment.ExpandEnvironmentVariables(alternateBinDirectory)) };
+            context.UserState = new CommandContext { Delegate = processWaitDelegate, Process = process, CancelableBuildTask = task };
             return processWaitDelegate.BeginInvoke(process.Id, timeOutMinutes, callback, state);
         }
 
         protected override void Cancel(AsyncCodeActivityContext context)
         {
-            CommandContext userState = context.UserState as CommandContext;
-
-            if (userState != null && userState.Process != null)
+            if (context.UserState is CommandContext userState && 
+                userState.CancelableBuildTask != null)
             {
-                userState.Process.Kill();
-
-                if (File.Exists(userState.LogFile))
-                    File.Delete(userState.LogFile);
+                userState.CancelableBuildTask.Cleanup(userState.Process);
             }
 
             if (context.IsCancellationRequested)
@@ -87,50 +64,11 @@ namespace CodeCrib.AX.TFS
                 if (processWaitException != null)
                     throw processWaitException;
 
-                Client.CILGenerationOutput output = null;
-                try
+                if (userState.CancelableBuildTask != null)
                 {
-                    output = Client.CILGenerationOutput.CreateFromFile(userState.LogFile);
+                    userState.CancelableBuildTask.End();
+                    userState.CancelableBuildTask.Cleanup(userState.Process);
                 }
-                catch (FileNotFoundException)
-                {
-                    throw new Exception("CIL generation log could not be found");
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception(string.Format("Error parsing CIL generation log: {0}", ex.Message));
-                }
-
-                bool hasErrors = false;
-                foreach (var item in output.Output)
-                {
-                    string compileMessage;
-
-                    if (item.LineNumber > 0)
-                        compileMessage = string.Format("Object {0} method {1}, line {2} : {3}", item.ElementName, item.MethodName, item.LineNumber, item.Message);
-                    else
-                        compileMessage = string.Format("Object {0} method {1} : {2}", item.ElementName, item.MethodName, item.Message);
-
-                    switch (item.Severity)
-                    {
-                        // Compile Errors
-                        case 0:
-                            context.TrackBuildError(compileMessage);
-                            hasErrors = true;
-                            break;
-                        // Compile Warnings
-                        case 1:
-                            context.TrackBuildWarning(compileMessage);
-                            break;
-                        // "Other"
-                        case 4:
-                        default:
-                            context.TrackBuildMessage(item.Message);
-                            break;
-                    }
-                }
-                if (hasErrors)
-                    throw new Exception("CIL error(s) found");
             }
         }
     }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace CodeCrib.AX.BuildTasks
 {
     [Serializable]
-    abstract public class ClientBuildTask : BuildTask
+    abstract public class ClientBuildTask : CancelableBuildTask
     {
         public List<string> LayerCodes { get; set; }
         public string ModelManifest { get; set; }
@@ -34,34 +34,33 @@ namespace CodeCrib.AX.BuildTasks
             ModelManifest = modelManifest;
         }
 
+        public ClientBuildTask(IBuildLogger buildLogger, int timeoutMinutes, string configurationFile) : base(buildLogger, timeoutMinutes, configurationFile)
+        {
+        }
+
         public ClientBuildTask()
         {
         }
 
-        abstract public Process Start();
-        abstract public void End(IBuildLogger buildLogger, AxaptaAutoRun autoRun);
+        public override void Run()
+        {
+            Process process = Start();
 
-        public void Cleanup(Process process, string logFile, string autoRunFile)
+            Exception executionException = CommandContext.WaitForProcess(process.Id, TimeoutMinutes);
+            if (executionException != null)
+            {
+                throw executionException;
+            }
+
+            End();
+            Cleanup(process);
+        }
+
+        public override void Cleanup(Process process)
         {
             if (process != null && !process.HasExited)
             {
                 process.Kill();
-            }
-
-            try
-            {
-                File.Delete(logFile);
-            }
-            catch (FileNotFoundException)
-            {
-            }
-
-            try
-            {
-                File.Delete(autoRunFile);
-            }
-            catch (FileNotFoundException)
-            {
             }
         }
     }

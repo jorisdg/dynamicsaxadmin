@@ -32,6 +32,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,16 +44,24 @@
     <Compile Include="AOSStartTask.cs" />
     <Compile Include="AOSStopTask.cs" />
     <Compile Include="AutoRunLogOutput.cs" />
+    <Compile Include="AxBuildTask.cs" />
     <Compile Include="BackupDatabaseTask.cs" />
     <Compile Include="BuildLogSeverity.cs" />
     <Compile Include="BuildTask.cs" />
+    <Compile Include="CancelableBuildTask.cs" />
     <Compile Include="CleanTask.cs" />
     <Compile Include="ClientBuildTask.cs" />
+    <Compile Include="ClientCompileTask.cs" />
+    <Compile Include="ClientImportVSProjectTask.cs" />
     <Compile Include="ClientImportXpoTask.cs" />
+    <Compile Include="ClientSynchronizeTask.cs" />
     <Compile Include="CombineXPOsTask.cs" />
     <Compile Include="CommandContext.cs" />
+    <Compile Include="CompileMessageReporter.cs" />
     <Compile Include="CreateModelTask.cs" />
     <Compile Include="DatabaseTask.cs" />
+    <Compile Include="DeployReferencesTask.cs" />
+    <Compile Include="ClientGenerateCILTask.cs" />
     <Compile Include="IBuildLogger.cs" />
     <Compile Include="ClientImportLabelsTask.cs" />
     <Compile Include="ITaskFromParametersInitializable.cs" />
@@ -61,6 +70,10 @@
     <Compile Include="RestoreDatabaseTask.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CodeCrib.AX.AXBuild\CodeCrib.AX.AXBuild\CodeCrib.AX.AXBuild.csproj">
+      <Project>{c1e5b831-90a6-4ab5-80dd-7918f817afe7}</Project>
+      <Name>CodeCrib.AX.AXBuild</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CodeCrib.AX.BuildRuntime\CodeCrib.AX.BuildRuntime.csproj">
       <Project>{48BCED8E-9671-4959-8A5C-D1EB37F8754A}</Project>
       <Name>CodeCrib.AX.BuildRuntime</Name>

@@ -36,67 +36,25 @@ namespace CodeCrib.AX.TFS
             bool updateXRef = UpdateCrossReference.Get(context);
             int timeOutMinutes = TimeOutMinutes.Get(context);
             string clientExePath = ClientExecutablePath.Get(context);
-
-            string configurationFile = ConfigurationFile.Get(context);
-
-            context.TrackBuildMessage(string.Format("Compiling application {0} cross-reference update.", updateXRef ? "with" : "without"));
-
-            Client.Commands.Compile compile = new Client.Commands.Compile()
-            {
-                Minimize = true,
-                LazyClassLoading = true,
-                LazyTableLoading = true,
-                UpdateCrossReference = updateXRef
-            };
-
-            if (!string.IsNullOrEmpty(configurationFile))
-            {
-                compile.ConfigurationFile = configurationFile;
-            }
-
             StringList layerCodes = LayerCodes.Get(context);
-            if (layerCodes != null)
-            {
-                string modelManifest = ModelManifestFile.Get(context);
-                if (!string.IsNullOrEmpty(modelManifest))
-                {
-                    string model;
-                    string publisher;
-                    string layer;
-                    string layerCode;
+            string configurationFile = ConfigurationFile.Get(context);
+            string modelManifest = ModelManifestFile.Get(context);
 
-                    CodeCrib.AX.Deploy.Configs.ExtractClientLayerModelInfo(configurationFile, layerCodes, modelManifest, out model, out publisher, out layer, out layerCode);
-
-                    compile.Model = model;
-                    compile.ModelPublisher = publisher;
-                    compile.Layer = layer;
-                    compile.LayerCode = layerCode;
-                }
-            }
-
-            Process process = null;
-            if (string.IsNullOrEmpty(clientExePath))
-                process = Client.Client.StartCommand(compile);
-            else
-                process = Client.Client.StartCommand(clientExePath, compile);
-
-            var clientConfig = CodeCrib.AX.Deploy.Configs.GetClientConfig(configurationFile);
+            ClientCompileTask task = new ClientCompileTask(context.DefaultLogger(), timeOutMinutes, configurationFile, layerCodes, modelManifest, clientExePath, updateXRef);
+            Process process = task.Start();
 
             Func<int, int, Exception> processWaitDelegate = new Func<int, int, Exception>(CommandContext.WaitForProcess);
-            context.UserState = new CommandContext { Delegate = processWaitDelegate, Process = process, AutoRun = null, AutoRunFile = null, LogFile = string.Format(@"{0}\{1}", Environment.ExpandEnvironmentVariables(clientConfig.LogDirectory), "AxCompileAll.html") };
+            context.UserState = new CommandContext { Delegate = processWaitDelegate, Process = process, CancelableBuildTask = task };
             return processWaitDelegate.BeginInvoke(process.Id, timeOutMinutes, callback, state);
         }
 
         protected override void Cancel(AsyncCodeActivityContext context)
         {
-            CommandContext userState = context.UserState as CommandContext;
 
-            if (userState != null && userState.Process != null)
+            if (context.UserState is CommandContext userState && 
+                userState.CancelableBuildTask != null)
             {
-                userState.Process.Kill();
-
-                if (File.Exists(userState.LogFile))
-                    File.Delete(userState.LogFile);
+                userState.CancelableBuildTask.Cleanup(userState.Process);
             }
 
             if (context.IsCancellationRequested)
@@ -107,32 +65,20 @@ namespace CodeCrib.AX.TFS
 
         protected override void EndExecute(AsyncCodeActivityContext context, IAsyncResult result)
         {
-            CommandContext userState = context.UserState as CommandContext;
 
-            if (userState != null && !string.IsNullOrEmpty(userState.LogFile))
+            if (context.UserState is CommandContext userState && 
+                userState.CancelableBuildTask != null)
             {
                 Func<int, int, Exception> processWaitDelegate = userState.Delegate;
                 Exception processWaitException = processWaitDelegate.EndInvoke(result);
 
                 if (processWaitException != null)
+                {
                     throw processWaitException;
-
-                Client.CompileOutput output = null;
-
-                try
-                {
-                    output = Client.CompileOutput.CreateFromFile(userState.LogFile);
-                }
-                catch (FileNotFoundException)
-                {
-                    throw new Exception("Compile log could not be found");
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception(string.Format("Error parsing compile log: {0}", ex.Message));
                 }
 
-                Helper.ReportCompileMessages(context, output);
+                userState.CancelableBuildTask.End();
+                userState.CancelableBuildTask.Cleanup(userState.Process);
             }
         }
     }

@@ -14,6 +14,7 @@ using System.Activities;
 using Microsoft.TeamFoundation.Build.Client;
 using Microsoft.TeamFoundation.Build.Workflow.Activities;
 using System.IO;
+using CodeCrib.AX.BuildTasks;
 
 namespace CodeCrib.AX.TFS
 {
@@ -27,34 +28,10 @@ namespace CodeCrib.AX.TFS
         protected override void Execute(CodeActivityContext context)
         {
             string configurationFile = ConfigurationFile.Get(context);
-            var serverConfig = CodeCrib.AX.Deploy.Configs.GetServerConfig(configurationFile);
             string sourcePath = ReferencesFolder.Get(context);
 
-            context.TrackBuildMessage("Deploying references to client and server");
-
-            if (System.IO.Directory.Exists(sourcePath))
-            {
-                string clientBasePath = string.Format(@"{0}\Microsoft\Dynamics Ax", System.Environment.GetEnvironmentVariable("localappdata"));
-                IEnumerable<string> folders = System.IO.Directory.EnumerateDirectories(clientBasePath, "VSAssemblies*");
-                string serverPath = string.Format(@"{0}\VSAssemblies", serverConfig.AlternateBinDirectory);
-
-                if (!System.IO.Directory.Exists(serverPath))
-                    System.IO.Directory.CreateDirectory(serverPath);
-
-                IEnumerable<string> files = System.IO.Directory.EnumerateFiles(sourcePath, "*");
-                foreach (string file in files)
-                {
-                    foreach (string folder in folders)
-                    {
-                        System.IO.File.Copy(file, string.Format(@"{0}\{1}", folder, System.IO.Path.GetFileName(file)));
-                    }
-                    System.IO.File.Copy(file, string.Format(@"{0}\{1}", serverPath, System.IO.Path.GetFileName(file)));
-                }
-            }
-            else
-            {
-                context.TrackBuildWarning(string.Format("Folder '{0}' containing reference files does not exist", sourcePath));
-            }
+            DeployReferencesTask task = new DeployReferencesTask(context.DefaultLogger(), configurationFile, sourcePath);
+            task.Run();
         }
     }
 }

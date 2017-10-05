@@ -51,6 +51,7 @@
     <Compile Include="CancelableBuildTask.cs" />
     <Compile Include="CleanTask.cs" />
     <Compile Include="ClientBuildTask.cs" />
+    <Compile Include="ClientCompileNodesTask.cs" />
     <Compile Include="ClientCompileTask.cs" />
     <Compile Include="ClientImportVSProjectTask.cs" />
     <Compile Include="ClientImportXpoTask.cs" />

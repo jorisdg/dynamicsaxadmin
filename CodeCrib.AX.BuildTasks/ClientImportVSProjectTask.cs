@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CodeCrib.AX.BuildRuntime;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -53,8 +54,7 @@ namespace CodeCrib.AX.BuildTasks
 
             Deploy.Configs.ExtractClientLayerModelInfo(ConfigurationFile, LayerCodes, ModelManifest, out ModelName, out Publisher, out Layer, out LayerCode);
 
-            Config.Client clientConfig = Deploy.Configs.GetClientConfig(ConfigurationFile);
-            LogFile = Path.Combine(Environment.ExpandEnvironmentVariables(clientConfig.LogDirectory), string.Format("VSImportLog-{1}.xml", Guid.NewGuid()));
+            LogFile = Path.Combine(BuildPaths.Temp, string.Format(@"AutoRun_VSImportLog_{0}.xml", Guid.NewGuid()));
 
             AutoRun = new Client.AutoRun.AxaptaAutoRun
             {
@@ -70,7 +70,7 @@ namespace CodeCrib.AX.BuildTasks
                 AutoRun.Steps.Add(new Client.AutoRun.Run() { Type = Client.AutoRun.RunType.@class, Name = "SysTreeNodeVSProject", Method = "importProject", Parameters = string.Format("@'{0}'", filename) });
             }
 
-            AutoRunFile = Path.Combine(Environment.GetEnvironmentVariable("temp"), string.Format(@"{0}\AutoRun-VSImport-{1}.xml", Guid.NewGuid()));
+            AutoRunFile = Path.Combine(BuildPaths.Temp, string.Format(@"AutoRun_VSImport_{0}.xml", Guid.NewGuid()));
             Client.AutoRun.AxaptaAutoRun.SerializeAutoRun(AutoRun, AutoRunFile);
             BuildLogger.StoreLogFile(AutoRunFile);
 

@@ -46,6 +46,11 @@ namespace CodeCrib.AX.BuildTasks
         {
             Process process = Start();
 
+            if (process == null)
+            {
+                return;
+            }
+
             Exception executionException = CommandContext.WaitForProcess(process.Id, TimeoutMinutes);
             if (executionException != null)
             {

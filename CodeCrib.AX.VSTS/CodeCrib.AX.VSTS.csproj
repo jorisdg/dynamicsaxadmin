@@ -49,10 +49,12 @@
     <Compile Include="Copy_References.cs" />
     <Compile Include="Export_ModelFile.cs" />
     <Compile Include="Import_LabelFiles.cs" />
+    <Compile Include="Import_VSProjects.cs" />
     <Compile Include="Import_XpoFile.cs" />
     <Compile Include="Initialize_EnvironmentFiles.cs" />
     <Compile Include="Invoke_AxBuild.cs" />
     <Compile Include="Invoke_CILGeneration.cs" />
+    <Compile Include="Invoke_ClientCompileNodes.cs" />
     <Compile Include="Merge_XpoFiles.cs" />
     <Compile Include="New_Model.cs" />
     <Compile Include="Restore_Database.cs" />

@@ -1,4 +1,5 @@
-﻿using CodeCrib.AX.Client.AutoRun;
+﻿using CodeCrib.AX.BuildRuntime;
+using CodeCrib.AX.Client.AutoRun;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -77,7 +78,7 @@ namespace CodeCrib.AX.BuildTasks
             Deploy.Configs.ExtractClientLayerModelInfo(ConfigurationFile, LayerCodes, ModelManifest, out ModelName, out Publisher, out Layer, out LayerCode);
 
             var clientConfig = Deploy.Configs.GetClientConfig(ConfigurationFile);
-            AutoRun = new AxaptaAutoRun() { ExitWhenDone = true, LogFile = string.Format(@"{0}\LabelFlushLog-{1}.xml", Environment.ExpandEnvironmentVariables(clientConfig.LogDirectory), Guid.NewGuid()) };
+            AutoRun = new AxaptaAutoRun() { ExitWhenDone = true, LogFile = Path.Combine(BuildPaths.Temp, string.Format(@"AutoRun_LabelFlushLog_{0}.xml", Guid.NewGuid())) };
             Client.Commands.ImportLabelFile importCommand = new Client.Commands.ImportLabelFile() { ConfigurationFile = ConfigurationFile, Layer = Layer, LayerCode = LayerCode, Model = ModelName, ModelPublisher = Publisher };
 
             foreach (string filename in Directory.GetFiles(LabelFilesFolder, "*.ald"))
@@ -95,7 +96,7 @@ namespace CodeCrib.AX.BuildTasks
                 }
             }
 
-            AutoRunFile = string.Format(@"{0}\AutoRun-LabelFlush-{1}.xml", Environment.GetEnvironmentVariable("temp"), Guid.NewGuid());
+            AutoRunFile = Path.Combine(BuildPaths.Temp, string.Format(@"AutoRun_LabelFlush_{0}.xml", Guid.NewGuid()));
             AxaptaAutoRun.SerializeAutoRun(AutoRun, AutoRunFile);
 
             BuildLogger.LogInformation(string.Format("Flushing imported label files"));

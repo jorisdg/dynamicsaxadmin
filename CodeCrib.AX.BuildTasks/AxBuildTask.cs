@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CodeCrib.AX.BuildRuntime;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -35,7 +36,7 @@ namespace CodeCrib.AX.BuildTasks
             AXBuild.Commands.Compile compile = new AXBuild.Commands.Compile()
             {
                 Workers = Workers,
-                LogPath = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), Path.GetRandomFileName())).FullName
+                LogPath = Directory.CreateDirectory(Path.Combine(BuildPaths.Temp, Path.GetRandomFileName())).FullName
             };
 
             LogFile = Path.Combine(compile.LogPath, "AxCompileAll.html");

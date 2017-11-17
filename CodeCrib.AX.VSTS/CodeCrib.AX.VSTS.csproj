@@ -49,6 +49,7 @@
     <Compile Include="Copy_References.cs" />
     <Compile Include="Export_ModelFile.cs" />
     <Compile Include="Import_LabelFiles.cs" />
+    <Compile Include="Import_ModelFile.cs" />
     <Compile Include="Import_VSProjects.cs" />
     <Compile Include="Import_XpoFile.cs" />
     <Compile Include="Initialize_EnvironmentFiles.cs" />

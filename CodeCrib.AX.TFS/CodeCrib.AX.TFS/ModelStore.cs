@@ -99,29 +99,11 @@ namespace CodeCrib.AX.TFS
         {
             string configurationFile = ConfigurationFile.Get(context);
             string modelFile = ModelFile.Get(context);
+            bool setNoInstallMode = SetNoInstallMode.Get(context);
             bool overwrite = OverwriteExisting.Get(context);
-            var serverConfig = CodeCrib.AX.Deploy.Configs.GetServerConfig(configurationFile);
 
-            CodeCrib.AX.Manage.ModelStore store = null;
-            if (serverConfig.AOSVersionOrigin.Substring(0, 3).Equals("6.0"))
-            {
-                store = new Manage.ModelStore(serverConfig.DatabaseServer, string.Format("{0}", serverConfig.Database));
-            }
-            else
-            {
-                store = new Manage.ModelStore(serverConfig.DatabaseServer, string.Format("{0}_model", serverConfig.Database));
-            }
-
-            if (overwrite)
-            {
-                store.InstallModelOverwrite(modelFile);
-            }
-            else
-            {
-                store.InstallModel(modelFile);
-            }
-            if (SetNoInstallMode.Get(context))
-                store.SetNoInstallMode();
+            ImportModelTask importModelTask = new ImportModelTask(context.DefaultLogger(), configurationFile, modelFile, setNoInstallMode, overwrite);
+            importModelTask.Run();
         }
     }
 

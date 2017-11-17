@@ -9,14 +9,14 @@ namespace CodeCrib.AX.BuildRuntime
 {
     public static class BuildPaths
     {
-        private static bool _initialized;
+        private static bool _tempInitialized;
         private static string _temp;
 
         public static string Temp
         {
             get
             {
-                if (!_initialized)
+                if (!_tempInitialized)
                 {
                     string buildWorkingPath = Environment.GetEnvironmentVariable("BUILD_SOURCESDIRECTORY");
                     if (!string.IsNullOrEmpty(buildWorkingPath))
@@ -28,7 +28,7 @@ namespace CodeCrib.AX.BuildRuntime
                     {
                         _temp = Path.GetTempPath();
                     }
-                    _initialized = true;
+                    _tempInitialized = true;
                 }
 
                 return _temp;

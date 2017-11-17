@@ -40,10 +40,13 @@ namespace CodeCrib.AX.TFS
 
         protected override void Cancel(AsyncCodeActivityContext context)
         {
-            if (context.UserState is CommandContext userState && 
-                userState.CancelableBuildTask != null)
+            if (context.UserState is CommandContext userState)
             {
-                userState.CancelableBuildTask.Cleanup(userState.Process);
+                CancelableBuildTask task = userState.RetrieveBuildTask(context.DefaultLogger());
+                if (task != null)
+                {
+                    task.Cleanup(userState.Process);
+                }
             }
 
             if (context.IsCancellationRequested)
@@ -64,10 +67,11 @@ namespace CodeCrib.AX.TFS
                 if (processWaitException != null)
                     throw processWaitException;
 
-                if (userState.CancelableBuildTask != null)
+                CancelableBuildTask task = userState.RetrieveBuildTask(context.DefaultLogger());
+                if (task != null)
                 {
-                    userState.CancelableBuildTask.End();
-                    userState.CancelableBuildTask.Cleanup(userState.Process);
+                    task.End();
+                    task.Cleanup(userState.Process);
                 }
             }
         }

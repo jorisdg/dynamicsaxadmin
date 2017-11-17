@@ -51,10 +51,13 @@ namespace CodeCrib.AX.TFS
         protected override void Cancel(AsyncCodeActivityContext context)
         {
 
-            if (context.UserState is CommandContext userState && 
-                userState.CancelableBuildTask != null)
+            if (context.UserState is CommandContext userState)
             {
-                userState.CancelableBuildTask.Cleanup(userState.Process);
+                CancelableBuildTask task = userState.RetrieveBuildTask(context.DefaultLogger());
+                if (task != null)
+                {
+                    task.Cleanup(userState.Process);
+                }
             }
 
             if (context.IsCancellationRequested)
@@ -66,19 +69,22 @@ namespace CodeCrib.AX.TFS
         protected override void EndExecute(AsyncCodeActivityContext context, IAsyncResult result)
         {
 
-            if (context.UserState is CommandContext userState && 
-                userState.CancelableBuildTask != null)
+            if (context.UserState is CommandContext userState)
             {
-                Func<int, int, Exception> processWaitDelegate = userState.Delegate;
-                Exception processWaitException = processWaitDelegate.EndInvoke(result);
-
-                if (processWaitException != null)
+                CancelableBuildTask task = userState.RetrieveBuildTask(context.DefaultLogger());
+                if (task != null)
                 {
-                    throw processWaitException;
-                }
+                    Func<int, int, Exception> processWaitDelegate = userState.Delegate;
+                    Exception processWaitException = processWaitDelegate.EndInvoke(result);
 
-                userState.CancelableBuildTask.End();
-                userState.CancelableBuildTask.Cleanup(userState.Process);
+                    if (processWaitException != null)
+                    {
+                        throw processWaitException;
+                    }
+
+                    task.End();
+                    task.Cleanup(userState.Process);
+                }
             }
         }
     }
@@ -121,10 +127,13 @@ namespace CodeCrib.AX.TFS
         protected override void Cancel(AsyncCodeActivityContext context)
         {
 
-            if (context.UserState is CommandContext userState &&
-                userState.CancelableBuildTask != null)
+            if (context.UserState is CommandContext userState)
             {
-                userState.CancelableBuildTask.Cleanup(userState.Process);
+                CancelableBuildTask task = userState.RetrieveBuildTask(context.DefaultLogger());
+                if (task != null)
+                {
+                    task.Cleanup(userState.Process);
+                }
             }
 
             if (context.IsCancellationRequested)
@@ -136,19 +145,22 @@ namespace CodeCrib.AX.TFS
         protected override void EndExecute(AsyncCodeActivityContext context, IAsyncResult result)
         {
 
-            if (context.UserState is CommandContext userState &&
-                userState.CancelableBuildTask != null)
+            if (context.UserState is CommandContext userState)
             {
-                Func<int, int, Exception> processWaitDelegate = userState.Delegate;
-                Exception processWaitException = processWaitDelegate.EndInvoke(result);
-
-                if (processWaitException != null)
+                CancelableBuildTask task = userState.RetrieveBuildTask(context.DefaultLogger());
+                if (task != null)
                 {
-                    throw processWaitException;
-                }
+                    Func<int, int, Exception> processWaitDelegate = userState.Delegate;
+                    Exception processWaitException = processWaitDelegate.EndInvoke(result);
 
-                userState.CancelableBuildTask.End();
-                userState.CancelableBuildTask.Cleanup(userState.Process);
+                    if (processWaitException != null)
+                    {
+                        throw processWaitException;
+                    }
+
+                    task.End();
+                    task.Cleanup(userState.Process);
+                }
             }
         }
 

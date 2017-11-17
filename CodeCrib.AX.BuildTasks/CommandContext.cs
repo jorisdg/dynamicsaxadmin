@@ -12,7 +12,13 @@ namespace CodeCrib.AX.BuildTasks
     {
         public Func<int, int, Exception> Delegate { get; set; }
         public Process Process { get; set; }
-        public CancelableBuildTask CancelableBuildTask { get; set; }
+        public CancelableBuildTask CancelableBuildTask { protected get; set; }
+
+        public CancelableBuildTask RetrieveBuildTask(IBuildLogger buildLogger)
+        {
+            CancelableBuildTask.SetBuildLogger(buildLogger);
+            return CancelableBuildTask;
+        }
 
         public static Exception WaitForProcess(int processId, int timeOutMinutes)
         {

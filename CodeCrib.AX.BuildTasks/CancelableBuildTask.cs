@@ -24,5 +24,10 @@ namespace CodeCrib.AX.BuildTasks
         public abstract Process Start();
         public abstract void End();
         public abstract void Cleanup(Process processToCleanUp);
+
+        public void SetBuildLogger(IBuildLogger buildLogger)
+        {
+            BuildLogger = buildLogger;
+        }
     }
 }

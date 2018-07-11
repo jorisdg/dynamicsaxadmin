@@ -8,3 +8,4 @@
 **/bin/Debug/
 **/bin/Release
 *.suo
+/CodeCrib.AX.PowerShell/.vs

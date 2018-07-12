@@ -11,7 +11,7 @@ Copy build output of the CodeCrib.AX.VSTS project to ```~\Documents\WindowsPower
 
 # Build Definition
 ## Template
-Import [the build definition template](/template/AX2012 VSTS build.json)
+Import the build definition template ```template/AX2012 VSTS build.json```
 
 ## Variables
 Each of these variables in the build definition is prefixed with CodeCrib.Build

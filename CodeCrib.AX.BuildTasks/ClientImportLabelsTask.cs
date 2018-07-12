@@ -85,26 +85,28 @@ namespace CodeCrib.AX.BuildTasks
             {
                 if (!IsEmptyLabelFile(filename))
                 {
-                    BuildLogger.LogInformation(string.Format("Importing label file {0} into model {1} ({2})", filename, ModelName, Publisher));
-                    importCommand.Filename = filename;
-                    Client.Client.ExecuteCommand(importCommand, TimeoutMinutes);
-
                     string labelFile = Path.GetFileNameWithoutExtension(filename).Substring(2, 3);
                     string labelLanguage = Path.GetFileNameWithoutExtension(filename).Substring(5);
 
+                    BuildLogger.LogInformation(string.Format("Importing label file {0} into model {1} ({2})", filename, ModelName, Publisher));
+                    importCommand.Filename = filename;
+                    importCommand.Language = labelLanguage;
+                    Client.Client.ExecuteCommand(importCommand, TimeoutMinutes);
+
                     AutoRun.Steps.Add(new Client.AutoRun.Run() { Type = Client.AutoRun.RunType.@class, Name = "Global", Method = "info", Parameters = string.Format("strFmt(\"Flush label {0} language {1}: %1\", Label::flush(\"{0}\",\"{1}\"))", labelFile, labelLanguage) });
+
+                    AutoRunFile = Path.Combine(BuildPaths.Temp, string.Format(@"AutoRun_LabelFlush_{0}.xml", Guid.NewGuid()));
+                    AxaptaAutoRun.SerializeAutoRun(AutoRun, AutoRunFile);
+
+                    BuildLogger.LogInformation(string.Format($"Flushing imported label file {labelFile} language {labelLanguage}"));
+                    BuildLogger.StoreLogFile(AutoRunFile);
+
+                    Client.Commands.AutoRun flushCommand = new Client.Commands.AutoRun() { ConfigurationFile = ConfigurationFile, Layer = Layer, LayerCode = LayerCode, Model = ModelName, ModelPublisher = Publisher, Filename = AutoRunFile };
+                    Client.Client.ExecuteCommand(flushCommand, TimeoutMinutes);
                 }
             }
 
-            AutoRunFile = Path.Combine(BuildPaths.Temp, string.Format(@"AutoRun_LabelFlush_{0}.xml", Guid.NewGuid()));
-            AxaptaAutoRun.SerializeAutoRun(AutoRun, AutoRunFile);
-
-            BuildLogger.LogInformation(string.Format("Flushing imported label files"));
-            BuildLogger.StoreLogFile(AutoRunFile);
-
-            Process process = Client.Client.StartCommand(new Client.Commands.AutoRun() { ConfigurationFile = ConfigurationFile, Layer = Layer, LayerCode = LayerCode, Model = ModelName, ModelPublisher = Publisher, Filename = AutoRunFile });
-
-            return process;
+            return null;
         }
 
         public override void End()

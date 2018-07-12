@@ -26,6 +26,7 @@ namespace CodeCrib.AX.Client.Commands
         public string Model { get; set; }
         public string ModelPublisher { get; set; }
         public string ConfigurationFile { get; set; }
+        public string Language { get; set; }
 
         virtual public List<string> Parameters()
         {
@@ -58,6 +59,11 @@ namespace CodeCrib.AX.Client.Commands
                     parameters.Add(string.Format("\"-Model=({0},{1})\"", Model, ModelPublisher));
                 else
                     parameters.Add(string.Format("\"-Model={0}\"", Model));
+            }
+
+            if (!string.IsNullOrEmpty(Language))
+            {
+                parameters.Add(string.Format("-language={0}", Language));
             }
 
             return parameters;

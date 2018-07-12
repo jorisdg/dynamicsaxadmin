@@ -1,0 +1,594 @@
+{
+  "options": [
+    {
+      "enabled": true,
+      "definition": { "id": "" },
+      "inputs": {
+        "branchFilters": "[\"+refs/heads/*\"]",
+        "additionalFields": "{}"
+      }
+    }
+  ],
+  "variables": {
+    "BuildConfiguration": { "value": "release" },
+    "BuildPlatform": { "value": "any cpu" },
+    "CodeCrib.Build.AdditionalModelPaths": { "value": "@()" },
+    "CodeCrib.Build.AOTCompilePaths": { "value": "@()" },
+    "CodeCrib.Build.AxBuildAlternateBinaryFolder": { "value": "" },
+    "CodeCrib.Build.AxBuildWorkers": { "value": "" },
+    "CodeCrib.Build.AxUtilBinaryFolderPath": { "value": "" },
+    "CodeCrib.Build.CombinedXpoFilePath": { "value": "$(Build.ArtifactStagingDirectory)\\$(Build.DefinitionName)_$(Build.BuildNumber).xpo" },
+    "CodeCrib.Build.ConfigurationFile": { "value": "" },
+    "CodeCrib.Build.DatabaseBackupFilePath": { "value": "" },
+    "CodeCrib.Build.DatabaseName": { "value": "" },
+    "CodeCrib.Build.DatabaseServerName": { "value": "" },
+    "CodeCrib.Build.ExportedModelFilePath": { "value": "$(Build.ArtifactStagingDirectory)\\$(Build.DefinitionName)_$(Build.BuildNumber).axmodel" },
+    "CodeCrib.Build.IncludeXpoArtifact": {
+      "value": "false",
+      "allowOverride": true
+    },
+    "CodeCrib.Build.LabelFilesFolder": { "value": "$(Build.SourcesDirectory)\\label files" },
+    "CodeCrib.Build.LayerCodes": { "value": "@()" },
+    "CodeCrib.Build.ModelDescription": { "value": "$(Build.DefinitionName)" },
+    "CodeCrib.Build.ModelManifestFilePath": { "value": "$(Build.SourcesDirectory)\\model.xml" },
+    "CodeCrib.Build.ModelstoreDatabaseBackupFilePath": { "value": "" },
+    "CodeCrib.Build.ModelVersion": { "value": "$(Build.BuildNumber)" },
+    "CodeCrib.Build.ReferencesFolder": { "value": "" },
+    "CodeCrib.Build.StrongNameKeyFilePath": { "value": "" },
+    "CodeCrib.Build.VSProjectsFolderPath": { "value": "$(Build.SourcesDirectory)\\Visual Studio Projects" },
+    "system.debug": {
+      "value": "false",
+      "allowOverride": true
+    }
+  },
+  "demands": [],
+  "retentionRules": [
+    {
+      "branches": [ "+refs/heads/*" ],
+      "artifacts": [],
+      "artifactTypesToDelete": [ "FilePath", "SymbolStore" ],
+      "daysToKeep": 10,
+      "minimumToKeep": 1,
+      "deleteBuildRecord": true,
+      "deleteTestResults": true
+    }
+  ],
+  "properties": {},
+  "tags": [],
+  "metrics": [],
+  "buildNumberFormat": "$(date:yyyy.MM.dd)$(rev:.r)",
+  "jobAuthorizationScope": 1,
+  "jobTimeoutInMinutes": 180,
+  "jobCancelTimeoutInMinutes": 5,
+  "process": {
+    "phases": [
+      {
+        "steps": [
+          {
+            "environment": {},
+            "enabled": true,
+            "continueOnError": false,
+            "alwaysRun": false,
+            "displayName": "Stop AOS",
+            "timeoutInMinutes": 0,
+            "condition": "succeeded()",
+            "refName": "",
+            "task": {
+              "id": "e213ff0f-5d5c-4791-802d-52ea3e7be1f1",
+              "versionSpec": "1.*",
+              "definitionType": "task"
+            },
+            "inputs": {
+              "scriptType": "inlineScript",
+              "scriptName": "",
+              "arguments": "",
+              "workingFolder": "",
+              "inlineScript": "Stop-AOS -ConfigurationFile \"$(CodeCrib.Build.ConfigurationFile)\"",
+              "failOnStandardError": "true"
+            }
+          },
+          {
+            "environment": {},
+            "enabled": true,
+            "continueOnError": false,
+            "alwaysRun": false,
+            "displayName": "Combine XPO Files",
+            "timeoutInMinutes": 0,
+            "condition": "succeeded()",
+            "refName": "",
+            "task": {
+              "id": "e213ff0f-5d5c-4791-802d-52ea3e7be1f1",
+              "versionSpec": "1.*",
+              "definitionType": "task"
+            },
+            "inputs": {
+              "scriptType": "inlineScript",
+              "scriptName": "",
+              "arguments": "",
+              "workingFolder": "",
+              "inlineScript": "Merge-XpoFiles -Folder \"$(Build.SourcesDirectory)\" -Recursive -OutputFilePath \"$(CodeCrib.Build.CombinedXpoFilePath)\" -IncludeSystemObjects -IncludeNonSystemObjects",
+              "failOnStandardError": "true"
+            }
+          },
+          {
+            "environment": {},
+            "enabled": true,
+            "continueOnError": false,
+            "alwaysRun": false,
+            "displayName": "Clean Up Files",
+            "timeoutInMinutes": 0,
+            "condition": "succeeded()",
+            "refName": "",
+            "task": {
+              "id": "e213ff0f-5d5c-4791-802d-52ea3e7be1f1",
+              "versionSpec": "1.*",
+              "definitionType": "task"
+            },
+            "inputs": {
+              "scriptType": "inlineScript",
+              "scriptName": "",
+              "arguments": "",
+              "workingFolder": "",
+              "inlineScript": "Initialize-EnvironmentFiles -ConfigurationFile \"$(CodeCrib.Build.ConfigurationFile)\"\n",
+              "failOnStandardError": "true"
+            }
+          },
+          {
+            "environment": {},
+            "enabled": true,
+            "continueOnError": false,
+            "alwaysRun": false,
+            "displayName": "Deploy References",
+            "timeoutInMinutes": 0,
+            "condition": "succeeded()",
+            "refName": "",
+            "task": {
+              "id": "e213ff0f-5d5c-4791-802d-52ea3e7be1f1",
+              "versionSpec": "1.*",
+              "definitionType": "task"
+            },
+            "inputs": {
+              "scriptType": "inlineScript",
+              "scriptName": "",
+              "arguments": "",
+              "workingFolder": "",
+              "inlineScript": "Copy-References -ConfigurationFile \"$(CodeCrib.Build.ConfigurationFile)\" -ReferencesFolderPath \"$(CodeCrib.Build.ReferencesFolder)\"\n",
+              "failOnStandardError": "true"
+            }
+          },
+          {
+            "environment": {},
+            "enabled": true,
+            "continueOnError": false,
+            "alwaysRun": false,
+            "displayName": "Restore Business Database",
+            "timeoutInMinutes": 0,
+            "condition": "succeeded()",
+            "refName": "",
+            "task": {
+              "id": "e213ff0f-5d5c-4791-802d-52ea3e7be1f1",
+              "versionSpec": "1.*",
+              "definitionType": "task"
+            },
+            "inputs": {
+              "scriptType": "inlineScript",
+              "scriptName": "",
+              "arguments": "",
+              "workingFolder": "",
+              "inlineScript": "Restore-Database -ServerName \"$(CodeCrib.Build.DatabaseServerName)\" -DatabaseName \"$(CodeCrib.Build.DatabaseName)\" -ConfigurationFile \"$(CodeCrib.Build.ConfigurationFile)\" -BackupFilePath \"$(CodeCrib.Build.DatabaseBackupFilePath)\"",
+              "failOnStandardError": "true"
+            }
+          },
+          {
+            "environment": {},
+            "enabled": true,
+            "continueOnError": false,
+            "alwaysRun": false,
+            "displayName": "Restore Modelstore Database",
+            "timeoutInMinutes": 0,
+            "condition": "succeeded()",
+            "refName": "",
+            "task": {
+              "id": "e213ff0f-5d5c-4791-802d-52ea3e7be1f1",
+              "versionSpec": "1.*",
+              "definitionType": "task"
+            },
+            "inputs": {
+              "scriptType": "inlineScript",
+              "scriptName": "",
+              "arguments": "",
+              "workingFolder": "",
+              "inlineScript": "Restore-Database -ServerName \"$(CodeCrib.Build.DatabaseServerName)\" -DatabaseName \"$(CodeCrib.Build.DatabaseName)_model\" -ConfigurationFile \"$(CodeCrib.Build.ConfigurationFile)\" -BackupFilePath \"$(CodeCrib.Build.ModelstoreDatabaseBackupFilePath)\"",
+              "failOnStandardError": "true"
+            }
+          },
+          {
+            "environment": {},
+            "enabled": true,
+            "continueOnError": false,
+            "alwaysRun": false,
+            "displayName": "Install Additional Models",
+            "timeoutInMinutes": 5,
+            "condition": "succeeded()",
+            "refName": "",
+            "task": {
+              "id": "e213ff0f-5d5c-4791-802d-52ea3e7be1f1",
+              "versionSpec": "1.*",
+              "definitionType": "task"
+            },
+            "inputs": {
+              "scriptType": "inlineScript",
+              "scriptName": "",
+              "arguments": "",
+              "workingFolder": "",
+              "inlineScript": "Import-ModelFiles -ConfigurationFile \"$(CodeCrib.Build.ConfigurationFile)\" -ModelFilePaths $(CodeCrib.Build.AdditionalModelPaths) -SetNoInstallMode -OverwriteExisting",
+              "failOnStandardError": "true"
+            }
+          },
+          {
+            "environment": {},
+            "enabled": true,
+            "continueOnError": false,
+            "alwaysRun": false,
+            "displayName": "Create Model",
+            "timeoutInMinutes": 5,
+            "condition": "succeeded()",
+            "refName": "",
+            "task": {
+              "id": "e213ff0f-5d5c-4791-802d-52ea3e7be1f1",
+              "versionSpec": "1.*",
+              "definitionType": "task"
+            },
+            "inputs": {
+              "scriptType": "inlineScript",
+              "scriptName": "",
+              "arguments": "",
+              "workingFolder": "",
+              "inlineScript": "New-Model -ConfigurationFile \"$(CodeCrib.Build.ConfigurationFile)\" -ModelManifest \"$(CodeCrib.Build.ModelManifestFilePath)\" -VersionOverride \"$(CodeCrib.Build.ModelVersion)\" -DescriptionOverride \"$(CodeCrib.Build.ModelDescription)\" -SetNoInstallMode -Verbose",
+              "failOnStandardError": "true"
+            }
+          },
+          {
+            "environment": {},
+            "enabled": true,
+            "continueOnError": false,
+            "alwaysRun": false,
+            "displayName": "Start AOS",
+            "timeoutInMinutes": 5,
+            "condition": "succeeded()",
+            "refName": "",
+            "task": {
+              "id": "e213ff0f-5d5c-4791-802d-52ea3e7be1f1",
+              "versionSpec": "1.*",
+              "definitionType": "task"
+            },
+            "inputs": {
+              "scriptType": "inlineScript",
+              "scriptName": "",
+              "arguments": "",
+              "workingFolder": "",
+              "inlineScript": "Start-AOS -ConfigurationFile \"$(CodeCrib.Build.ConfigurationFile)\"",
+              "failOnStandardError": "true"
+            }
+          },
+          {
+            "environment": {},
+            "enabled": true,
+            "continueOnError": false,
+            "alwaysRun": false,
+            "displayName": "Import Labels",
+            "timeoutInMinutes": 5,
+            "condition": "succeeded()",
+            "refName": "",
+            "task": {
+              "id": "e213ff0f-5d5c-4791-802d-52ea3e7be1f1",
+              "versionSpec": "1.*",
+              "definitionType": "task"
+            },
+            "inputs": {
+              "scriptType": "inlineScript",
+              "scriptName": "",
+              "arguments": "",
+              "workingFolder": "",
+              "inlineScript": "Import-LabelFiles -ConfigurationFile \"$(CodeCrib.Build.ConfigurationFile)\" -LayerCodes $(CodeCrib.Build.LayerCodes) -ModelManifest \"$(CodeCrib.Build.ModelManifestFilePath)\" -LabelFilesFolder \"$(CodeCrib.Build.LabelFilesFolder)\"",
+              "failOnStandardError": "true"
+            }
+          },
+          {
+            "environment": {},
+            "enabled": true,
+            "continueOnError": false,
+            "alwaysRun": false,
+            "displayName": "Import Combined XPO",
+            "timeoutInMinutes": 40,
+            "condition": "succeeded()",
+            "refName": "",
+            "task": {
+              "id": "e213ff0f-5d5c-4791-802d-52ea3e7be1f1",
+              "versionSpec": "1.*",
+              "definitionType": "task"
+            },
+            "inputs": {
+              "scriptType": "inlineScript",
+              "scriptName": "",
+              "arguments": "",
+              "workingFolder": "",
+              "inlineScript": "Import-XpoFile -ConfigurationFile \"$(CodeCrib.Build.ConfigurationFile)\" -LayerCodes $(CodeCrib.Build.LayerCodes) -ModelManifest \"$(CodeCrib.Build.ModelManifestFilePath)\" -XpoFilePath \"$(CodeCrib.Build.CombinedXpoFilePath)\"",
+              "failOnStandardError": "true"
+            }
+          },
+          {
+            "environment": {},
+            "enabled": true,
+            "continueOnError": false,
+            "alwaysRun": false,
+            "displayName": "Import Visual Studio Projects",
+            "timeoutInMinutes": 20,
+            "condition": "succeeded()",
+            "refName": "",
+            "task": {
+              "id": "e213ff0f-5d5c-4791-802d-52ea3e7be1f1",
+              "versionSpec": "1.*",
+              "definitionType": "task"
+            },
+            "inputs": {
+              "scriptType": "inlineScript",
+              "scriptName": "",
+              "arguments": "",
+              "workingFolder": "",
+              "inlineScript": "Import-VSProjects -ConfigurationFile \"$(CodeCrib.Build.ConfigurationFile)\" -LayerCodes $(CodeCrib.Build.LayerCodes) -ModelManifest \"$(CodeCrib.Build.ModelManifestFilePath)\" -VSProjectsFolder \"$(CodeCrib.Build.VSProjectsFolderPath)\"",
+              "failOnStandardError": "true"
+            }
+          },
+          {
+            "environment": {},
+            "enabled": true,
+            "continueOnError": false,
+            "alwaysRun": false,
+            "displayName": "Compile Specific AOT Nodes With Client",
+            "timeoutInMinutes": 20,
+            "condition": "succeeded()",
+            "refName": "",
+            "task": {
+              "id": "e213ff0f-5d5c-4791-802d-52ea3e7be1f1",
+              "versionSpec": "1.*",
+              "definitionType": "task"
+            },
+            "inputs": {
+              "scriptType": "inlineScript",
+              "scriptName": "",
+              "arguments": "",
+              "workingFolder": "",
+              "inlineScript": "Invoke-ClientCompileNodes -ConfigurationFile \"$(CodeCrib.Build.ConfigurationFile)\" -LayerCodes $(CodeCrib.Build.LayerCodes) -ModelManifest \"$(CodeCrib.Build.ModelManifestFilePath)\" -AOTCompilePaths $(CodeCrib.Build.AOTCompilePaths)",
+              "failOnStandardError": "true"
+            }
+          },
+          {
+            "environment": {},
+            "enabled": true,
+            "continueOnError": false,
+            "alwaysRun": false,
+            "displayName": "Stop AOS",
+            "timeoutInMinutes": 0,
+            "condition": "succeeded()",
+            "refName": "",
+            "task": {
+              "id": "e213ff0f-5d5c-4791-802d-52ea3e7be1f1",
+              "versionSpec": "1.*",
+              "definitionType": "task"
+            },
+            "inputs": {
+              "scriptType": "inlineScript",
+              "scriptName": "",
+              "arguments": "",
+              "workingFolder": "",
+              "inlineScript": "Stop-AOS -ConfigurationFile \"$(CodeCrib.Build.ConfigurationFile)\"",
+              "failOnStandardError": "true"
+            }
+          },
+          {
+            "environment": {},
+            "enabled": true,
+            "continueOnError": false,
+            "alwaysRun": false,
+            "displayName": "Run AxBuild Compile",
+            "timeoutInMinutes": 45,
+            "condition": "succeeded()",
+            "refName": "",
+            "task": {
+              "id": "e213ff0f-5d5c-4791-802d-52ea3e7be1f1",
+              "versionSpec": "1.*",
+              "definitionType": "task"
+            },
+            "inputs": {
+              "scriptType": "inlineScript",
+              "scriptName": "",
+              "arguments": "",
+              "workingFolder": "",
+              "inlineScript": "Invoke-AxBuild -ConfigurationFile \"$(CodeCrib.Build.ConfigurationFile)\" -Workers \"$(CodeCrib.Build.AxBuildWorkers)\" -AlternateBinaryFolder \"$(CodeCrib.Build.AxBuildAlternateBinaryFolder)\"",
+              "failOnStandardError": "true"
+            }
+          },
+          {
+            "environment": {},
+            "enabled": true,
+            "continueOnError": false,
+            "alwaysRun": false,
+            "displayName": "Start AOS",
+            "timeoutInMinutes": 5,
+            "condition": "succeeded()",
+            "refName": "",
+            "task": {
+              "id": "e213ff0f-5d5c-4791-802d-52ea3e7be1f1",
+              "versionSpec": "1.*",
+              "definitionType": "task"
+            },
+            "inputs": {
+              "scriptType": "inlineScript",
+              "scriptName": "",
+              "arguments": "",
+              "workingFolder": "",
+              "inlineScript": "Start-AOS -ConfigurationFile \"$(CodeCrib.Build.ConfigurationFile)\"",
+              "failOnStandardError": "true"
+            }
+          },
+          {
+            "environment": {},
+            "enabled": true,
+            "continueOnError": false,
+            "alwaysRun": false,
+            "displayName": "Generate CIL",
+            "timeoutInMinutes": 60,
+            "condition": "succeeded()",
+            "refName": "",
+            "task": {
+              "id": "e213ff0f-5d5c-4791-802d-52ea3e7be1f1",
+              "versionSpec": "1.*",
+              "definitionType": "task"
+            },
+            "inputs": {
+              "scriptType": "inlineScript",
+              "scriptName": "",
+              "arguments": "",
+              "workingFolder": "",
+              "inlineScript": "Invoke-CILGeneration -ConfigurationFile \"$(CodeCrib.Build.ConfigurationFile)\"",
+              "failOnStandardError": "true"
+            }
+          },
+          {
+            "environment": {},
+            "enabled": true,
+            "continueOnError": false,
+            "alwaysRun": false,
+            "displayName": "Synchronize",
+            "timeoutInMinutes": 60,
+            "condition": "succeeded()",
+            "refName": "",
+            "task": {
+              "id": "e213ff0f-5d5c-4791-802d-52ea3e7be1f1",
+              "versionSpec": "1.*",
+              "definitionType": "task"
+            },
+            "inputs": {
+              "scriptType": "inlineScript",
+              "scriptName": "",
+              "arguments": "",
+              "workingFolder": "",
+              "inlineScript": "Sync-DataDictionary -ConfigurationFile \"$(CodeCrib.Build.ConfigurationFile)\"",
+              "failOnStandardError": "true"
+            }
+          },
+          {
+            "environment": {},
+            "enabled": true,
+            "continueOnError": false,
+            "alwaysRun": false,
+            "displayName": "Export Model File",
+            "timeoutInMinutes": 5,
+            "condition": "succeeded()",
+            "refName": "",
+            "task": {
+              "id": "e213ff0f-5d5c-4791-802d-52ea3e7be1f1",
+              "versionSpec": "1.*",
+              "definitionType": "task"
+            },
+            "inputs": {
+              "scriptType": "inlineScript",
+              "scriptName": "",
+              "arguments": "",
+              "workingFolder": "",
+              "inlineScript": "Export-ModelFile -ConfigurationFile \"$(CodeCrib.Build.ConfigurationFile)\" -ModelFilePath \"$(CodeCrib.Build.ExportedModelFilePath)\" -ModelManifestFilePath \"$(CodeCrib.Build.ModelManifestFilePath)\" -AxUtilBinaryFolderPath \"$(CodeCrib.Build.AxUtilBinaryFolderPath)\" -StrongNameKeyFilePath \"$(CodeCrib.Build.StrongNameKeyFilePath)\"",
+              "failOnStandardError": "true"
+            }
+          },
+          {
+            "environment": {},
+            "enabled": true,
+            "continueOnError": false,
+            "alwaysRun": false,
+            "displayName": "Remove Staged XPO Files",
+            "timeoutInMinutes": 0,
+            "condition": "eq(variables['CodeCrib.Build.IncludeXpoArtifact'], false)",
+            "refName": "",
+            "task": {
+              "id": "b7e8b412-0437-4065-9371-edc5881de25b",
+              "versionSpec": "1.*",
+              "definitionType": "task"
+            },
+            "inputs": {
+              "SourceFolder": "$(Build.ArtifactStagingDirectory)",
+              "Contents": "**\\*.xpo"
+            }
+          },
+          {
+            "environment": {},
+            "enabled": true,
+            "continueOnError": false,
+            "alwaysRun": false,
+            "displayName": "Publish Artifact: model",
+            "timeoutInMinutes": 0,
+            "refName": "",
+            "task": {
+              "id": "2ff763a7-ce83-4e1f-bc89-0ae63477cebe",
+              "versionSpec": "1.*",
+              "definitionType": "task"
+            },
+            "inputs": {
+              "PathtoPublish": "$(build.artifactstagingdirectory)",
+              "ArtifactName": "model",
+              "ArtifactType": "Container",
+              "TargetPath": "\\\\my\\share\\$(Build.DefinitionName)\\$(Build.BuildNumber)",
+              "Parallel": "false",
+              "ParallelCount": "8"
+            }
+          }
+        ],
+        "name": "Phase 1",
+        "refName": "Phase_1",
+        "condition": "succeeded()",
+        "target": {
+          "executionOptions": { "type": 0 },
+          "allowScriptsAuthAccessOption": false,
+          "type": 1
+        },
+        "jobAuthorizationScope": "projectCollection",
+        "jobCancelTimeoutInMinutes": 1
+      }
+    ],
+    "type": 1
+  },
+  "repository": {
+    "properties": {
+      "cleanOptions": "3",
+      "tfvcMapping": "{\"mappings\":[]}",
+      "labelSources": "0",
+      "labelSourcesFormat": "$(build.buildNumber)"
+    },
+    "id": "$/",
+    "type": "TfsVersionControl",
+    "name": "",
+    "url": "",
+    "defaultBranch": "",
+    "rootFolder": "",
+    "clean": "true",
+    "checkoutSubmodules": false
+  },
+  "processParameters": {},
+  "quality": 1,
+  "drafts": [],
+  "queue": {
+    "_links": { "self": { "href": "" } },
+    "id": 0,
+    "name": "",
+    "url": "",
+    "pool": {
+      "id": 0,
+      "name": ""
+    }
+  },
+  "name": "AX2012 VSTS build",
+  "path": "\\",
+  "type": 2,
+  "queueStatus": 0,
+  "revision": 8
+}

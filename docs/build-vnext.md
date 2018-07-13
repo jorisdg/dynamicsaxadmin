@@ -7,7 +7,7 @@ Configure the build agent to run as a service using a Windows Active Directory i
 * Access network shared resources such as database backup files
 
 ## PowerShell Module
-Copy build output of the CodeCrib.AX.VSTS project to ```~\Documents\WindowsPowerShell\CodeCrib.AX.VSTS``` for the build agent identity.
+Copy build output of the CodeCrib.AX.VSTS project (bin\Release\*) to ```~\Documents\WindowsPowerShell\Modules\CodeCrib.AX.VSTS``` for the build agent identity.
 
 # Build Definition
 ## Template

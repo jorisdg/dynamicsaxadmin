@@ -68,11 +68,11 @@
     <Compile Include="WrappedBuildTask.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CodeCrib.AX.BuildRuntime\CodeCrib.AX.BuildRuntime.csproj">
+    <ProjectReference Include="..\..\CodeCrib.AX.BuildRuntime\CodeCrib.AX.BuildRuntime.csproj">
       <Project>{48BCED8E-9671-4959-8A5C-D1EB37F8754A}</Project>
       <Name>CodeCrib.AX.BuildRuntime</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CodeCrib.AX.BuildTasks\CodeCrib.AX.BuildTasks.csproj">
+    <ProjectReference Include="..\..\CodeCrib.AX.BuildTasks\CodeCrib.AX.BuildTasks.csproj">
       <Project>{73FC195C-5812-4D3C-9895-033E77B2FE1A}</Project>
       <Name>CodeCrib.AX.BuildTasks</Name>
     </ProjectReference>

@@ -2,10 +2,9 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/.vs
-/CodeCrib.AX.TFS/.vs
+**/.vs/
 **/obj
 **/bin/Debug/
 **/bin/Release
 *.suo
-/CodeCrib.AX.PowerShell/.vs
+**/packages/

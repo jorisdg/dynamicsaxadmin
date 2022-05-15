@@ -1,9 +1,0 @@
-﻿<Window x:Class="AxManage.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="600">
-    <TabControl Margin="2">
-        <TabItem Header="">
-        </TabItem>
-    </TabControl>
-</Window>
